@@ -4,6 +4,7 @@ package cl.inacap.unidad1.clases;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -25,6 +27,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.UserHandle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Display;
 
 import org.json.JSONArray;
@@ -48,6 +51,16 @@ public class Cliente implements Serializable {
     public String nombre_cliente;
     public boolean estado_cliente;
 
+    //nombre de las columnas de la tabla cliente
+    private String COL_ID_CLIENTE = "id_cliente";
+    private String COL_NOMBRE_CLIENTE = "nombre_cliente";
+    private String COL_ESTADO_CLIENTE = "estado_cliente";
+    //se juntan las columnas para generar los query con todas las columnas
+    private String[] columnas = { this.COL_ID_CLIENTE, this.COL_NOMBRE_CLIENTE, this.COL_ESTADO_CLIENTE };
+
+    //se genera el nombre de la tabla para las llamadas a query
+    private String nombreTabla = "cliente";
+
     //valor string del cliente
     public String toString()
     {
@@ -57,94 +70,96 @@ public class Cliente implements Serializable {
     //se traen todos los clientes
     public ArrayList<Cliente> listaClientes()
     {
-        ArrayList<Cliente> lista = new ArrayList<Cliente>();
+        try {
 
-        JSONArray jsonArray = JsonUtil._clientes;
-        if(jsonArray != null)
-        {
-            try {
-                //se recorre el json array de clientes para asignarlos al tipo Clientes
-                for(int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    Cliente cliente = new Cliente();
-                    cliente.id_cliente = jsonObject.getInt("id_cliente");
-                    cliente.nombre_cliente = jsonObject.getString("nombre_cliente");
-                    cliente.estado_cliente = jsonObject.getBoolean("estado_cliente");
-                    lista.add(cliente);
-                }
-                return lista;
-            } catch (JSONException e) {
-                e.printStackTrace();
+            ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+            //se consulta a la base de datos todos los clientes existentes
+            Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla, this.columnas, null, null, null, null, null);
+            //se mueve al primer resultado
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                //pasamos el valor por el lector del cursor
+                Cliente cliente = cursorToCliente(cursor);
+                clientes.add(cliente);
+                //se continua al siguiente resultado
+                cursor.moveToNext();
             }
-        }
+            cursor.close();
+            return clientes;
 
-        return lista;
+        }
+        catch (Exception e)
+        {
+            Log.e("SegundaAplicacion",e.toString());
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    //se traen todos los clientes disponibles (que no han sido eliminados lógicamente)
-    public ArrayList<Cliente> listaClientesDisponibles()
-    {
+
+    //funcion para transformar un cursor en un cliente
+    private Cliente cursorToCliente(Cursor cursor) {
+
+        Cliente cliente = new Cliente();
+        cliente.id_cliente = cursor.getInt(cursor.getColumnIndex(this.COL_ID_CLIENTE));
+        cliente.nombre_cliente = cursor.getString(cursor.getColumnIndex(this.COL_NOMBRE_CLIENTE));
+        //en la base de datos el estado es int, por lo tanto se transforma el valor del cliente (booleano) a su equivalente en int
+        cliente.estado_cliente = (cursor.getInt(cursor.getColumnIndex(this.COL_ESTADO_CLIENTE))) == 1 ? true : false;
+
+        return cliente;
 
 
-        ArrayList<Cliente> lista = new ArrayList<Cliente>();
+    }
 
-        JSONArray jsonArray = JsonUtil._clientes;
-        if(jsonArray != null)
-        {
-            try {
-                for(int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    Cliente cliente = new Cliente();
-                    cliente.id_cliente = jsonObject.getInt("id_cliente");
-                    cliente.nombre_cliente = jsonObject.getString("nombre_cliente");
-                    cliente.estado_cliente = jsonObject.getBoolean("estado_cliente");
-                    if(cliente.estado_cliente)
-                        lista.add(cliente);
-                }
-                return lista;
-            } catch (JSONException e) {
-                e.printStackTrace();
+    //Se genera y obtiene la lista de usuarios
+    //se traen todos los clientes disponibles (que no han sido eliminados lógicamente) para el pedido
+    public ArrayList<Cliente> listaClientesDisponibles(){
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        //se genera la consulta a todos los clientes que no han sido eliminados logicamente agregando al query un where
+        Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas , this.COL_ESTADO_CLIENTE + "= 1 ", null, null, null, null);
+        if(cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Cliente cliente = cursorToCliente(cursor);
+                clientes.add(cliente);
+                cursor.moveToNext();
             }
         }
-
-        return lista;
+        cursor.close();
+        return clientes;
     }
+
+
     //Agrega un nuevo cliente ('C'RUD)
     public String AgregarCliente() {
         try {
-            //se revisa si exiten clientes registrados
-            int size = (JsonUtil._clientes != null) ? JsonUtil._clientes.length() : 0;
-            JSONObject jsonObject = null;
-            if (size == 0) {
-                //en caso de no existir se asigna el cliente numero 1
-                this.id_cliente = 1;
-                jsonObject = new JSONObject();
-                jsonObject.put("id_cliente", this.id_cliente);
-                jsonObject.put("nombre_cliente", this.nombre_cliente);
-                jsonObject.put("estado_cliente", this.estado_cliente);
-            } else {
-                //en caso de existir, se asigna el id del ultimo cliente +1
-                jsonObject = JsonUtil._clientes.getJSONObject(size - 1);
-                int id_ultimo_cliente = jsonObject.getInt("id_cliente");
-                jsonObject = new JSONObject();
-                this.id_cliente = id_ultimo_cliente + 1;
-                jsonObject.put("id_cliente", this.id_cliente);
-                jsonObject.put("nombre_cliente", this.nombre_cliente);
-                jsonObject.put("estado_cliente", this.estado_cliente);
+            //con esta consulta buscaremos si existe algun cliente con el mismo nombre para no volver a agregarlo.
+            Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas , this.COL_NOMBRE_CLIENTE + "='" + this.nombre_cliente+"'", null, null, null, null);
+            Cliente cliente;
+            //si existe resultado entrará al cursor indicando que ya existe un cliente con ese nombre
+            if(cursor.moveToFirst()) {
+                cliente = cursorToCliente(cursor);
+                return "El cliente ya existe. Intente con otro nombre";
             }
-            //se agrega al json array de clientes
-            JsonUtil._clientes.put(jsonObject);
-            //se escribe en el documento json de clientes
-            new JsonUtil().escribirJsonCliente(JsonUtil._clientes);
-            return "El cliente se agregó con éxito";
+            else {
+                //se crea un contenedor de valores para agregarlo a la base de datos
+                ContentValues values = new ContentValues();
 
-        } catch (JSONException e) {
+                values.put(this.COL_NOMBRE_CLIENTE, this.nombre_cliente);
+                values.put(this.COL_ESTADO_CLIENTE, (this.estado_cliente ? 1 : 0));
+                //se inserta con funcion que arroja errores para evitar problemas
+                long insert = OperacionesBaseDatos.escribirInstancia().insertOrThrow(this.nombreTabla,null,values);
+                if(insert > 0) {
+                    //se entrega el id del cliente para su reconocimiento en los pedidos
+                    this.id_cliente = Integer.parseInt("" + insert);
+                    return "Cliente agregado con exito";
+                }
+                else
+                    return "Error al intentar crear cliente";
+            }
+        } catch (Exception e) {
+            Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
-            return "Error al intentar verificar clientes";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error al intentar agregar el cliente";
-
+            return "Error al intentar agregar un clientes";
         }
     }
 
@@ -152,6 +167,7 @@ public class Cliente implements Serializable {
     //Obtiene (lee) un cliente (C'R'UD)
     public Cliente ObtenerCliente(int id_cliente)
     {
+        //(Se mantiene primera solucion al problema)
         ArrayList<Cliente> lista = this.listaClientes();
         //se recorre la lista en busqueda del cliente
         for(int i = 0; i < lista.size(); i++) {
@@ -170,56 +186,52 @@ public class Cliente implements Serializable {
     //Modifica un cliente (CR'U'D)
     public String ModificarCliente() {
         try {
-            //se recorre el json array de clientes en busca del cliente a modificar
-            for (int i = 0; i < JsonUtil._clientes.length(); i++) {
-                JSONObject obj = JsonUtil._clientes.getJSONObject(i);
-                Cliente cliente = new Cliente();
-                cliente.id_cliente = obj.getInt("id_cliente");
-                cliente.nombre_cliente = obj.getString("nombre_cliente");
-                cliente.estado_cliente = obj.getBoolean("estado_cliente");
-                if (cliente.id_cliente == this.id_cliente) {
-                    //en caso de encontrarlo validara si se han hecho cambios en el objeto
-                    if(!cliente.nombre_cliente.equals(this.nombre_cliente) || cliente.estado_cliente != this.estado_cliente){
-                        JSONObject object = JsonUtil._clientes.getJSONObject(i);
-                        object.remove("estado_cliente");
-                        object.remove("nombre_cliente");
-                        object.put("estado_cliente",this.estado_cliente);
-                        object.put("nombre_cliente",this.nombre_cliente);
-                        //si hay cambios se actualizara el jsonobject y se guarda en el documento
-                        new JsonUtil().escribirJsonCliente(JsonUtil._clientes);
-                        return "El cliente se modificó con éxito";
-                    }
-                    else
-                        return "El cliente no tiene cambios";
-                }
-
+            //al igual que al agregar un nuevo cliente, se verifica que este nombre esta en la base de datos
+            Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas , this.COL_NOMBRE_CLIENTE + "='" + this.nombre_cliente+"'", null, null, null, null);
+            Cliente cliente;
+            //en caso de que el cursor tenga resultado entrará al if indicando que se encontró un cliente con ese nombre
+            if(cursor.moveToFirst()) {
+                cliente = cursorToCliente(cursor);
+                return "El cliente ya existe. Intente con otro nombre";
             }
-        } catch (JSONException e) {
+            else {
+                //si no se encuentra, se crea el contenedor de datos para enviar una actualizacion
+                ContentValues values = new ContentValues();
+                values.put(this.COL_NOMBRE_CLIENTE, this.nombre_cliente);
+                //en la base de datos el estado es int, por lo tanto se transforma el valor del cliente (booleano) a su equivalente en int
+                values.put(this.COL_ESTADO_CLIENTE, this.estado_cliente);
+
+                //se mandan los datos para modificar el registro
+                OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_cliente = " + this.id_cliente, null);
+                return "Se modifico el cliente con exito";
+            }
+        } catch (Exception e) {
+            Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
             return "Error al intentar recuperar el cliente";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error al intentar modificar el cliente";
         }
-
-        return "No se modifico el cliente ";
     }
 
     //Eliminar un cliente (CRU'D') (De manera lógica)
-    public String EliminarCliente()
-    {
-        //pregunta el estado del cliente
-        if(this.estado_cliente){
-            //si este esta vigente procedera a la eliminación
-            this.estado_cliente = false;
-            String resultado = this.ModificarCliente();
-            if(resultado == "El cliente se modificó con éxito")
-                return "El cliente se eliminó con exito  (lógico)";
-            else
-                return resultado;
-        }
-        else
-            return "El cliente ya ha sido eliminado (lógico)";
-    }
+    public String EliminarCliente() {
+        try {
+            //pregunta el estado del cliente
+            if (this.estado_cliente) {
 
+                this.estado_cliente = false;
+                ContentValues values = new ContentValues();
+                //en la base de datos el estado es int, por lo tanto se transforma el valor del cliente (booleano) a su equivalente en int
+                values.put(this.COL_ESTADO_CLIENTE, this.estado_cliente ? 1 : 0);
+                //se genera la actualizacion del registro marcando al cliente con estado falso, indicando que no estie
+                OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_cliente = " + this.id_cliente, null);
+                return "Se elmino el cliente con exito";
+            }
+            else
+                return "El cliente ya ha sido eliminado (lógico)";
+        } catch (Exception e) {
+            Log.e("SegundaAplicacion",e.toString());
+            e.printStackTrace();
+            return "Error al intentar elminar el cliente";
+        }
+    }
 }

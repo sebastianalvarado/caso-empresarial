@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import cl.inacap.unidad1.adapter.ProductosAdapter;
 import cl.inacap.unidad1.clases.Cliente;
 import cl.inacap.unidad1.clases.Producto;
 import cl.inacap.unidad1.clases.Producto;
@@ -30,28 +31,37 @@ public class ProductosActivity extends AppCompatActivity {
 
 
 
-        /*
-        //Para efectos de evaluacion, funcionalidad no requerida
-        Button btn_pedidos = (Button)findViewById(R.id.btn_nuevo_producto);
+        Button btn_clientes  = (Button)findViewById(R.id.btn_clientes);
+        Button btn_pedidos = (Button)findViewById(R.id.btn_pedidos);
 
+        //seteo de botones para el resto de los formularios
+        btn_clientes.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(ProductosActivity.this, ClientesActivity.class);
+                ProductosActivity.this.startActivity(intent);
+
+            }
+
+        });
 
         btn_pedidos.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(ProductosActivity.this, ProductoActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("accion","nuevo");
-                intent.putExtra("extras",bundle);
+                Intent intent = new Intent(ProductosActivity.this, PedidosActivity.class);
                 ProductosActivity.this.startActivity(intent);
 
             }
 
         });
-        */
 
+        //se llena la lista de productos
         llenarListaProductos();
+
 
 
 
@@ -59,50 +69,48 @@ public class ProductosActivity extends AppCompatActivity {
     //Se pobla el listview de Producto
     private void llenarListaProductos() {
 
+
         ListView lv_producto = (ListView)findViewById(R.id.lv_productos);
         Producto producto = new Producto();
         ArrayList<Producto> productos = producto.listaProductos();
 
-        adapter = new ArrayAdapter<Producto>(getApplicationContext(), android.R.layout.simple_spinner_item, productos);
-
-        lv_producto.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
-
-        lv_producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Producto producto = (Producto)parent.getAdapter().getItem(position);
-
-                if(getIntent().hasExtra("extras")) {
-                    Bundle bundle = getIntent().getBundleExtra("extras");
-                    if(bundle.getString("accion").equals("productopedido")) {
+        //se pregunta si la cponsulta  ala activdad proviene de la actividad de pedidos
+        //de ser asi oculta los botones que acceden al resto de los formularios
+        //y se actualiza la lista de productos a los disponibles
+        if (getIntent().hasExtra("extras")) {
+            Bundle bundle = getIntent().getExtras().getBundle("extras");
+            if(bundle.getString("accion").equals("productopedido")) {
+                productos = producto.listaProductosDisponibles(); //lista de solo disponibles
+                //se ocultan los botones
+                Button btn_clientes  = (Button)findViewById(R.id.btn_clientes);
+                Button btn_pedidos = (Button)findViewById(R.id.btn_pedidos);
+                btn_clientes.setVisibility(View.GONE);
+                btn_pedidos.setVisibility(View.GONE);
+                //en caso de ser llamado desde pedidos los item puedes ser seleccionados par el pedido
+                lv_producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position,
+                                            long id) {
+                        Producto producto = (Producto) parent.getAdapter().getItem(position);
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("productopedido", producto);
                         setResult(Activity.RESULT_OK, returnIntent);
                         finish();
-                        return;
                     }
-                }
+                });
             }
-        });
-        /*
-        //No se requiere ya que para efectos de evaluación, crear productos por sistema no se requiere
-        lv_producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                Producto producto = (Producto)parent.getAdapter().getItem(position);
-                Intent intent = new Intent(ProductosActivity.this, ProductoActivity.class);
-                //envia el objeto que se quiere modificar con la accion que hara la siguiente activity (Producto)
-                Bundle bundle = new Bundle();
-                bundle.putString("accion","editar");
-                bundle.putSerializable("producto",(Serializable)producto);
-                intent.putExtra("extras",bundle);
-                startActivity(intent);
-            }
-        });
-    */
+        }
+        else{
+            productos = producto.listaProductos();
+        }
+
+
+        //adapter = new ArrayAdapter<Producto>(getApplicationContext(), android.R.layout.simple_spinner_item, productos);
+        adapter = new ProductosAdapter(this,productos);
+        lv_producto.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+
+
     }
 }

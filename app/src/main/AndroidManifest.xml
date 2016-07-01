@@ -23,9 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuActivity"
-            android:label="Menu" />
-        <activity
             android:name=".ProductosActivity"
             android:label="Productos" />
         <activity
@@ -34,9 +31,6 @@
         <activity
             android:name=".PedidoActivity"
             android:label="Pedido" />
-        <activity
-            android:name=".ProductoActivity"
-            android:label="Producto" />
         <activity
             android:name=".ClientesActivity"
             android:label="Clientes"/>

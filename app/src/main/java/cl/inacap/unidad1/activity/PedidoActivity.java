@@ -31,27 +31,37 @@ import cl.inacap.unidad1.clases.Producto;
 
 public class PedidoActivity extends AppCompatActivity {
     ArrayAdapter<Producto> adapter;
-    Pedido pedido;
-    Cliente cliente;
-    Producto producto;
+    //se generan las clases globales para tener mejor acceso a los compronentes del pedido
+    Pedido pedido = new Pedido();
+    Cliente cliente = new Cliente();
+    Producto producto = new Producto();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido);
 
-        final LinearLayout ll_idpedido = (LinearLayout)findViewById(R.id.ll_idpedido);
-        final TextView txv_idpedido = (TextView)findViewById(R.id.txv_idpedido);
-
-        TextView txv_cliente_pedido = (TextView)findViewById(R.id.txv_cliente_pedido);
-        TextView txv_producto_pedido = (TextView)findViewById(R.id.txv_producto_pedido);
-        final TextView txv_precio_pedido = (TextView)findViewById(R.id.txv_precio_pedido);
-        final EditText txt_fecha_pedido = (EditText)findViewById(R.id.txt_fecha_pedido);
+        //se obtienen los componenetes
+        TextView txv_idpedido = (TextView)findViewById(R.id.txv_idpedido);
+        final TextView txt_precio_pedido = (TextView)findViewById(R.id.txv_precio_pedido);
         final EditText txt_cantidad_pedido = (EditText)findViewById(R.id.txt_cantidad_pedido);
-        CheckBox cb_estado_pedido = (CheckBox)findViewById(R.id.cb_estado_pedido);
+        final EditText txt_fecha_pedido = (EditText)findViewById(R.id.txt_fecha_pedido);
         final Button btn_cliente_pedido = (Button)findViewById(R.id.btn_cliente_pedido);
         Button btn_producto_pedido = (Button)findViewById(R.id.btn_producto_pedido);
         Button btn_gestionar_pedido = (Button)findViewById(R.id.btn_gestionar_pedido);
         Button btn_eliminar_pedido = (Button)findViewById(R.id.btn_eliminar_pedido);
+        final CheckBox cb_estado_pedido = (CheckBox)findViewById(R.id.cb_estado_pedido);
+        Button btn_volver = (Button)findViewById(R.id.btn_pedidos_cliente);
+
+        //se setea un boton volver
+        btn_volver.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                finish();
+
+            }
+        });
+
 
         txt_cantidad_pedido.addTextChangedListener(new TextWatcher() {
             @Override
@@ -61,23 +71,18 @@ public class PedidoActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                String _cantidad = s.toString();
+                int cantidad = Integer.parseInt(_cantidad.length() == 0 ? "0" : _cantidad);
+                int valor = cantidad * producto.precio_producto;
+                txt_precio_pedido.setText(String.valueOf(valor));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(txt_cantidad_pedido.getText().toString().length() <= 0) {
-                    txv_precio_pedido.setText("Total: "+String.valueOf(0));
-                    return;
-                }
-                int precio = producto.precio_producto;
-                String _cantidad = txt_cantidad_pedido.getText().toString();
-                int cantidad  = pedido.cantidad_producto = Integer.parseInt(_cantidad);
-                int valor = precio * cantidad;
-                txv_precio_pedido.setText("Total: "+String.valueOf(valor));
             }
         });
 
+        //se setea el boton para buscar al cliente
         btn_cliente_pedido.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -87,12 +92,14 @@ public class PedidoActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("accion","clientepedido");
                 intent.putExtra("extras",bundle);
+                //http://stackoverflow.com/questions/920306/sending-data-back-to-the-main-activity-in-android
                 PedidoActivity.this.startActivityForResult( intent, 1);
 
             }
 
         });
 
+        //se setea el boton para buscar al producto
         btn_producto_pedido.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -102,6 +109,7 @@ public class PedidoActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("accion","productopedido");
                 intent.putExtra("extras",bundle);
+                //http://stackoverflow.com/questions/920306/sending-data-back-to-the-main-activity-in-android
                 PedidoActivity.this.startActivityForResult( intent, 2);
 
             }
@@ -112,15 +120,14 @@ public class PedidoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                String resultado = "";
-                resultado = pedido.EliminarProducto();
+                String resultado = pedido.EliminarPedido();
                 Toast.makeText(PedidoActivity.this,resultado, Toast.LENGTH_LONG).show();
-                actualizarActivity();
             }
 
         });
 
 
+        //se busca que accion se hara
         Bundle bundle = null;
         String accion = "";
         if(getIntent().hasExtra("extras")) {
@@ -129,122 +136,111 @@ public class PedidoActivity extends AppCompatActivity {
         }
         if(accion.equals("editar"))
         {
+            btn_gestionar_pedido.setText("Editar");
             pedido = (Pedido)bundle.getSerializable("pedido");
-            cliente = new Cliente();
-            producto = new Producto();
             cliente.ObtenerCliente(pedido.id_cliente);
             producto.ObtenerProducto(pedido.id_producto);
-
-            btn_gestionar_pedido.setText("Editar");
-            txv_cliente_pedido.setText(cliente.toString());
-            txv_producto_pedido.setText(producto.toString());
+            //se llenan los componentes
+            txv_idpedido.setText(String.valueOf(pedido.id_pedido));
             txt_cantidad_pedido.setText(String.valueOf(pedido.cantidad_producto));
-            txv_precio_pedido.setText(String.valueOf(pedido.precio_pedido));
+            txt_fecha_pedido.setText(pedido.fecha_pedido);
+            txt_precio_pedido.setText(String.valueOf(pedido.precio_pedido));
             cb_estado_pedido.setChecked(pedido.estado_pedido);
-            cb_estado_pedido.setEnabled(true);
-            txt_cantidad_pedido.setEnabled(true);
+            btn_cliente_pedido.setText(cliente.toString());
+            btn_producto_pedido.setText(producto.toString());
 
-            if(pedido.estado_pedido)
-                btn_eliminar_pedido.setVisibility(View.GONE);
-
-            btn_gestionar_pedido.setOnClickListener(new View.OnClickListener(){
+            btn_gestionar_pedido.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
+                    //se llenan los valores del pedido, al ser global se utilza tanto para ingresar y modificar.
+                    ModificarValores();
+                    String resultado = pedido.ModificarPedido();
+                    Toast.makeText(PedidoActivity.this,resultado, Toast.LENGTH_LONG).show();
 
-                    String respuesta = "";
-                    respuesta = pedido.ModificarPedido();
-                    pedido.fecha_pedido = txt_fecha_pedido.getText().toString();
-                    String cantidad = txt_cantidad_pedido.getText().toString();
-                    pedido.cantidad_producto = Integer.parseInt(cantidad);
-                    Toast.makeText(PedidoActivity.this,respuesta, Toast.LENGTH_LONG).show();
-                    actualizarActivity();
-            }
-
+                }
             });
 
-
-        }
-        else if(accion.equals("nuevo"))
-        {
-            pedido = new Pedido();
-            Calendar cal = Calendar.getInstance();
-            Date fecha = cal.getTime();
-            String fechaHoy = new SimpleDateFormat("dd/MM/yyyy").format(fecha);
-            assert txt_fecha_pedido != null;
-            txt_fecha_pedido.setText(fechaHoy);
-            btn_gestionar_pedido.setText("Nuevo");
-            ll_idpedido.setVisibility(LinearLayout.GONE);
-            btn_eliminar_pedido.setVisibility(View.GONE);
-            cb_estado_pedido.setEnabled(false);
-
-            btn_gestionar_pedido.setOnClickListener(new View.OnClickListener(){
+            btn_eliminar_pedido.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    String respuesta = "";
-                    String _cantidad = txt_cantidad_pedido.getText().toString();
-                    pedido.cantidad_producto = Integer.parseInt(_cantidad);
-                    pedido.precio_pedido = Integer.parseInt(_cantidad) * producto.precio_producto;
-                    pedido.fecha_pedido = txt_fecha_pedido.getText().toString();
-                    respuesta = pedido.AgregarPedido();
-                    Toast.makeText(PedidoActivity.this,respuesta, Toast.LENGTH_LONG).show();
-                    if(respuesta.equals("El pedido se agregó con éxito"))
-                        actualizarActivity();
+                    String resultado = pedido.EliminarPedido();
+                    Toast.makeText(PedidoActivity.this,resultado, Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+        }
+        if(accion.equals("nuevo"))
+        {
+            pedido = new Pedido();
+            btn_eliminar_pedido.setVisibility(View.GONE);
+            btn_gestionar_pedido.setText("Nuevo");
+            //se indica que hará el boton de gestión
+            btn_gestionar_pedido.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    ModificarValores();
+                    String resultado = pedido.AgregarPedido(); //agrega un nuevo cliente
+                    Toast.makeText(PedidoActivity.this,resultado, Toast.LENGTH_LONG).show();
+                    //se vuelve a inicializar la activity con el nuevo cliente para gestionar su modificacion
+                    actualizarActivity();
 
                 }
 
             });
-
         }
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //se utiliza para el llamado de datos de clientes y productos
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case 1:
-                    if (resultCode == Activity.RESULT_OK) {
-                        Cliente _cliente = (Cliente) data.getExtras().getSerializable("clientepedido");
-                        TextView txv_cliente_pedido = (TextView) findViewById(R.id.txv_cliente_pedido);
-                        this.cliente = _cliente ;
-                        pedido.id_cliente = _cliente .id_cliente;
-                        txv_cliente_pedido.setText(this.cliente.toString());
-                        Toast.makeText(this,"Cliente nuevo seleccionado", Toast.LENGTH_LONG).show();
+        //request 1 es el del cliente
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                //una vez recibido el valor se setea en la variable globlar
+                cliente = (Cliente)data.getExtras().getSerializable("clientepedido");
+                Button btn_cliente_pedido = (Button)findViewById(R.id.btn_cliente_pedido);
+                btn_cliente_pedido.setText(cliente.toString());
+                pedido.id_cliente = cliente.id_cliente;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+        //request 2 es el del producto
+        if (requestCode == 2 ) {
+            if(resultCode == Activity.RESULT_OK){
+                //una vez recibido el valor se setea en la variable globlar
+                producto = (Producto)data.getExtras().getSerializable("productopedido");
+                Button btn_producto_pedido = (Button)findViewById(R.id.btn_producto_pedido);
+                EditText txt_cantidad_pedido = (EditText)findViewById(R.id.txt_cantidad_pedido);
+                TextView txv_precio_pedido = (TextView)findViewById(R.id.txv_precio_pedido);
 
-                    }
-                    if (resultCode == Activity.RESULT_CANCELED) {
-                        Toast.makeText(PedidoActivity.this,"No se selecciono cliente nuevo", Toast.LENGTH_LONG).show();
-
-                    }
-
-                break;
-            case 2:
-                if (resultCode == Activity.RESULT_OK) {
-                    Producto producto = (Producto) data.getExtras().getSerializable("productopedido");
-                    TextView txv_producto_pedido = (TextView) findViewById(R.id.txv_producto_pedido);
-                    EditText txt_cantidad_pedido = (EditText) findViewById(R.id.txt_cantidad_pedido);
-                    txt_cantidad_pedido.setEnabled(true);
-                    this.producto = producto;
-                    pedido.id_producto = producto.id_producto;
-                    txv_producto_pedido.setText(producto.toString());
-
-                    Toast.makeText(PedidoActivity.this,"Producto nuevo seleccionado", Toast.LENGTH_LONG).show();
-
-                }
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    Toast.makeText(PedidoActivity.this,"No se selecciono producto nuevo", Toast.LENGTH_LONG).show();
-
+                //aqui se pregunta si ya se ingreso la cantidad de productos,
+                // para una vez insertado el producto se calcule automaticamente
+                btn_producto_pedido.setText(producto.toString());
+                pedido.id_producto = producto.id_producto;
+                String _cantidad = txt_cantidad_pedido.getText().toString();
+                if(_cantidad.length() > 0) {
+                    int cantidad = Integer.parseInt(_cantidad.length() == 0 ? "0" : _cantidad);
+                    int valor = cantidad * producto.precio_producto;
+                    txv_precio_pedido.setText(String.valueOf(valor));
                 }
 
-                break;
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
         }
     }
 
-
-    //se vuelve a inicializar la activity
+    //funcionalidad para actualizar la actividad una vez que se agrega un pedido
     void actualizarActivity()
     {
         Intent intent = new Intent(PedidoActivity.this, PedidoActivity.class);
@@ -254,6 +250,24 @@ public class PedidoActivity extends AppCompatActivity {
         intent.putExtra("extras",bundle);
         startActivity(intent);
         finish();
+    }
+
+    //funcion para la moficiacion del pedido, utilizado tanto para agregar uno nuevo o modificar uno ya existente
+    void ModificarValores()
+    {
+        CheckBox cb_estado_pedido = (CheckBox)findViewById(R.id.cb_estado_pedido);
+        EditText txt_fecha_pedido = (EditText)findViewById(R.id.txt_fecha_pedido);
+        EditText txv_cantidad_pedido = (EditText)findViewById(R.id.txt_cantidad_pedido);
+        TextView txv_precio_pedido = (TextView)findViewById(R.id.txv_precio_pedido);
+
+        pedido.fecha_pedido = txt_fecha_pedido.getText().toString();
+        pedido.estado_pedido = cb_estado_pedido.isChecked();
+        String cantidad = txv_cantidad_pedido.getText().toString();
+        pedido.cantidad_producto = Integer.parseInt(cantidad);
+        String precio = txv_precio_pedido.getText().toString();
+        pedido.precio_pedido = Integer.parseInt(precio);
+        pedido.id_cliente = cliente.id_cliente;
+        pedido.id_producto = producto.id_producto;
     }
 
 }

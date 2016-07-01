@@ -1,6 +1,10 @@
 package cl.inacap.unidad1.clases;
 
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,218 +21,174 @@ public class Pedido implements Serializable {
     public int id_pedido;
     public int id_cliente;
     public int id_producto;
+    public String vendedor;
     public int cantidad_producto;
     public String fecha_pedido;
     public int precio_pedido;
     public boolean estado_pedido;
 
+
+    //nombre de las columnas de la tabla
+    private String COL_ID_PEDIDO = "id_pedido";
+    private String COL_ID_CLIENTE = "id_cliente";
+    private String COL_ID_PRODUCTO = "id_producto";
+    private String COL_VENDEDOR = "vendedor";
+    private String COL_CANTIDAD_PRODUCTO = "cantidad_producto";
+    private String COL_FECHA_PEDIDO = "fecha_pedido";
+    private String COL_PRECIO_PEDIDO = "precio_pedido";
+    private String COL_ESTADO_PEDIDO= "estado_pedido";
+    //se juntan las columnas para generar los query con todas las columnas
+    private String[] columnas = {
+            this.COL_ID_PEDIDO,
+            this.COL_ID_CLIENTE,
+            this.COL_ID_PRODUCTO,
+            this.COL_VENDEDOR,
+            this.COL_CANTIDAD_PRODUCTO,
+            this.COL_FECHA_PEDIDO,
+            this.COL_PRECIO_PEDIDO,
+            this.COL_ESTADO_PEDIDO
+    };
+    //se genera el nombre de la tabla para las llamadas a query
+    private String nombreTabla = "pedido";
+
+
     public String toString()
     {
         return String.valueOf(this.id_pedido) + " : "
-            + "C: " + String.valueOf(this.id_cliente)
-            + "; P: " + String.valueOf(this.id_producto)
-            + "\nUnd: " + String.valueOf(this.cantidad_producto)
-            + "; V: " + String.valueOf(precio_pedido)
-            + "; Fecha: " + this.fecha_pedido
-            + "; (" + (this.estado_pedido ? "Entregado" : "No Entregado" ) + ")";
+                + "C: " + String.valueOf(this.id_cliente)
+                + "; P: " + String.valueOf(this.id_producto)
+                + "\nUnd: " + String.valueOf(this.cantidad_producto)
+                + "; V: " + String.valueOf(precio_pedido)
+                + "; Fecha: " + this.fecha_pedido
+                + "; (" + (this.estado_pedido ? "Entregado" : "No Entregado" ) + ")";
     }
 
+    //funcion para transformar un cursor a la clase tipo
+    private Pedido cursorToPedido(Cursor cursor) {
+
+        Pedido pedido = new Pedido();
+        pedido.id_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_ID_PEDIDO));
+        pedido.id_cliente = cursor.getInt(cursor.getColumnIndex(this.COL_ID_CLIENTE));
+        pedido.id_producto = cursor.getInt(cursor.getColumnIndex(this.COL_ID_PRODUCTO));
+        pedido.vendedor = cursor.getString(cursor.getColumnIndex(this.COL_VENDEDOR));
+        pedido.cantidad_producto = cursor.getInt(cursor.getColumnIndex(this.COL_CANTIDAD_PRODUCTO));
+        pedido.fecha_pedido = cursor.getString(cursor.getColumnIndex(this.COL_FECHA_PEDIDO));
+        pedido.precio_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_PRECIO_PEDIDO));
+        //en la base de datos el estado es int, por lo tanto se transforma el valor de la clase (booleano) con su equivalente en int
+        pedido.estado_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_ESTADO_PEDIDO)) == 1 ? true : false;
+
+        return pedido;
+
+
+    }
+
+    //lista de todos los pedidos
     public ArrayList<Pedido> listaPedidos()
     {
-        ArrayList<Pedido> lista = new ArrayList<Pedido>();
-
-        JSONArray jsonArray = JsonUtil._pedidos;
-        if(jsonArray != null)
-        {
-            try {
-                //se recorre el json array de Productos para asignarlos al tipo pedidos
-                for(int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    Pedido pedido = new Pedido();
-                    pedido.id_pedido = jsonObject.getInt("id_pedido");
-                    pedido.id_cliente = jsonObject.getInt("id_cliente");
-                    pedido.id_producto = jsonObject.getInt("id_producto");
-                    pedido.cantidad_producto = jsonObject.getInt("cantidad_producto");
-                    pedido.fecha_pedido = jsonObject.getString("fecha_pedido");
-                    pedido.precio_pedido = jsonObject.getInt("precio_pedido");
-                    pedido.estado_pedido = jsonObject.getBoolean("estado_pedido");
-                    lista.add(pedido);
-                }
-                return lista;
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+            //se genera la query para la consulta de todos los datos
+            Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas , null, null, null, null, null);
+            cursor.moveToFirst();
+            //recorre el restultado de los datos
+            while (!cursor.isAfterLast()) {
+                //utiliza la funcion para transformar el cursor en la clase
+                Pedido pedido = cursorToPedido(cursor);
+                pedidos.add(pedido);
+                cursor.moveToNext();
             }
-        }
+            cursor.close();
+            return pedidos;
 
-        return lista;
+        }
+        catch (Exception e)
+        {
+            Log.e("SegundaAplicacion",e.toString());
+            e.printStackTrace();
+            return null;
+        }
     }
-    
+    //lista de los pedidos por cliente
     public ArrayList<Pedido> listaPedidosPorCliente(int id_cliente)
     {
-        ArrayList<Pedido> lista = new ArrayList<>();
-        for (Pedido p: this.listaPedidos()) {
-            if(p.id_cliente == id_cliente)
-                lista.add(p);
-        }
-        return lista;
-    }
+        try {
+            ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+            //se genera la consulta se los pedidos por cliente
+            Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas , this.COL_ID_CLIENTE + " = "+ id_cliente, null, null, null, null);
+            cursor.moveToFirst();
+            //se recorre el cursor
+            while (!cursor.isAfterLast()) {
+                //se utiliza la funcion para pasar de cursor a la clase
+                Pedido pedido = cursorToPedido(cursor);
+                pedidos.add(pedido);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            return pedidos;
 
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
     //Agrega un nuevo pedido ('C'RUD)
     public String AgregarPedido() {
         try {
-            //se revisa si exiten pedido registrados
-            int size = (JsonUtil._pedidos != null) ? JsonUtil._pedidos.length() : 0;
-            JSONObject jsonObject = null;
-            if (size == 0) {
-                //en caso de no existir se asigna el Producto numero 1
-                this.id_pedido = 1;
-                jsonObject = new JSONObject();
-                jsonObject.put("id_pedido ", this.id_pedido );
-                jsonObject.put("id_cliente", this.id_cliente);
-                jsonObject.put("id_producto", this.id_producto);
-                jsonObject.put("cantidad_producto", this.cantidad_producto);
-                jsonObject.put("fecha_pedido", this.fecha_pedido);
-                jsonObject.put("precio_pedido", this.precio_pedido);
-                jsonObject.put("estado_pedido", this.estado_pedido);
-            } else {
-                //en caso de existir, se asigna el id del ultimo Producto +1
-                jsonObject = JsonUtil._pedidos.getJSONObject(size - 1);
-                int id_ultimo_pedido = jsonObject.getInt("id_pedido");
-                jsonObject = new JSONObject();
-                this.id_pedido = id_ultimo_pedido + 1;
-                jsonObject.put("id_producto", this.id_producto);
-                jsonObject.put("id_pedido ", this.id_pedido );
-                jsonObject.put("id_cliente", this.id_cliente);
-                jsonObject.put("id_producto", this.id_producto);
-                jsonObject.put("cantidad_producto", this.cantidad_producto);
-                jsonObject.put("fecha_pedido", this.fecha_pedido);
-                jsonObject.put("precio_pedido", this.precio_pedido);
-                jsonObject.put("estado_pedido", this.estado_pedido);
+            //se utiliza un contenedor de valores para la insercion de los datos a la tabla
+            ContentValues values = new ContentValues();
+            values.put(this.COL_ID_CLIENTE, this.id_cliente);
+            values.put(this.COL_ID_PRODUCTO, (this.id_producto));
+            values.put(this.COL_VENDEDOR, (OperacionesBaseDatos.login_vendedor));
+            values.put(this.COL_CANTIDAD_PRODUCTO, this.cantidad_producto);
+            values.put(this.COL_FECHA_PEDIDO, (this.fecha_pedido));
+            values.put(this.COL_PRECIO_PEDIDO, this.precio_pedido);
+            //se trasnforma el booleando a int que es el tipo de datos de la base de datos
+            values.put(this.COL_ESTADO_PEDIDO, (this.estado_pedido ? 1 : 0));
+            //se genera la query de inserción reconociendo errores
+            long insert = OperacionesBaseDatos.escribirInstancia().insertOrThrow(this.nombreTabla, null, values);
+            if (insert > 0){
+                //si la inserción ha sido con exito, se registra el id del pedido en la clase
+                this.id_pedido = Integer.parseInt("" + insert);
+                return "Pedido agregado con exito";
             }
-            //se agrega al json array de pedido
-            JsonUtil._pedidos.put(jsonObject);
-            //se escribe en el documento json de pedido
-            new JsonUtil().escribirJsonPedido(JsonUtil._pedidos);
-            return "El pedido se agregó con éxito";
+            else
+                return "Error al intentar agregar pedido";
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return "Error al intentar verificar pedido";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error al intentar agregar el pedido";
-
+            return "Error al intentar agregar un predido";
         }
     }
 
-
-    //Obtiene (lee) un pedido (C'R'UD)
-    public Pedido ObtenerPedido(int id_pedido)
-    {
-        ArrayList<Pedido> lista = this.listaPedidos();
-        //se recorre la lista en busqueda del Producto
-        for(int i = 0; i < lista.size(); i++) {
-            if(lista.get(i).id_pedido == id_pedido) {
-                //se actualizan los datos del mismo Producto
-                this.id_pedido = lista.get(i).id_pedido;
-                this.id_cliente = lista.get(i).id_cliente;
-                this.id_producto = lista.get(i).id_producto;
-                this.cantidad_producto = lista.get(i).cantidad_producto;
-                this.fecha_pedido = lista.get(i).fecha_pedido;
-                this.precio_pedido = lista.get(i).precio_pedido;
-                this.estado_pedido = lista.get(i).estado_pedido;
-                return this;
-            }
-        }
-        //en caso de no encontrarlo retorna nulo
-        return null;
-    }
-
-    //Modifica un pedido (CR'U'D)
     public String ModificarPedido() {
         try {
-            //se recorre el json array de pedido en busca del pedido a modificar
-            for (int i = 0; i < JsonUtil._productos.length(); i++) {
-                JSONObject obj = JsonUtil._productos.getJSONObject(i);
-                Pedido pedido = new Pedido();
+            //se crea un contenedor para los valores que se modificaran en la base de datos
+            ContentValues values = new ContentValues();
+            values.put(this.COL_ID_CLIENTE, this.id_cliente);
+            values.put(this.COL_ID_PRODUCTO, this.id_producto);
+            values.put(this.COL_CANTIDAD_PRODUCTO, this.cantidad_producto);
+            values.put(this.COL_FECHA_PEDIDO, this.fecha_pedido);
+            values.put(this.COL_PRECIO_PEDIDO, this.precio_pedido);
+            //se trasnforma el booleando a int que es el tipo de datos de la base de datos
+            values.put(this.COL_ESTADO_PEDIDO, this.estado_pedido ? 1 : 0);
+            //se genera la consulta de update
+            OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_pedido = " + this.id_pedido, null);
+            return "Se modifico el pedido con exito";
 
-                pedido.id_pedido =  obj.getInt("id_producto");
-                pedido.id_producto = obj.getInt("id_producto");
-                pedido.id_cliente = obj.getInt("id_cliente");
-                pedido.id_producto = obj.getInt("id_producto");
-                pedido.cantidad_producto = obj.getInt("cantidad_producto");
-                pedido.fecha_pedido = obj.getString("fecha_pedido");
-                pedido.precio_pedido = obj.getInt("precio_pedido");
-                pedido.estado_pedido = obj.getBoolean("estado_pedido");
-
-
-                if (pedido.id_pedido == this.id_pedido) {
-                    //en caso de encontrarlo validara si se han hecho cambios en el objeto
-                    if(pedido.id_producto != this.id_producto
-                        || pedido.id_cliente != this.id_cliente
-                        || pedido.id_producto != this.id_producto
-                        || pedido.cantidad_producto != this.cantidad_producto
-                        || pedido.fecha_pedido.equals(this.fecha_pedido)
-                        || pedido.precio_pedido != this.precio_pedido
-                        || pedido.estado_pedido != this.estado_pedido){
-                        JSONObject object = JsonUtil._productos.getJSONObject(i);
-                        object.remove("id_producto");
-                        object.remove("id_cliente");
-                        object.remove("id_producto");
-                        object.remove("cantidad_producto");
-                        object.remove("fecha_pedido");
-                        object.remove("precio_pedido");
-                        object.remove("estado_pedido");
-
-                        object.put("id_producto", this.id_producto);
-                        object.put("id_cliente", this.id_cliente);
-                        object.put("id_producto", this.id_producto);
-                        object.put("cantidad_producto", this.cantidad_producto);
-                        object.put("fecha_pedido", this.fecha_pedido);
-                        object.put("precio_pedido", this.precio_pedido);
-                        object.put("estado_pedido", this.estado_pedido);
-
-
-                        //si hay cambios se actualizara el jsonobject y se guarda en el documento
-                        new JsonUtil().escribirJsonPedido(JsonUtil._pedidos);
-                        return "El pedido se modificó con éxito";
-                    }
-                    else
-                        return "El pedido no tiene cambios";
-                }
-
-            }
-        } catch (JSONException e) {
+        } catch (Exception e) {
+            Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
             return "Error al intentar recuperar el pedido";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error al intentar modificar el pedido";
         }
 
-        return "No se modifico el pedido ";
     }
 
-    //Eliminar un Producto (CRU'D') (De manera lógica)
-    public String EliminarProducto()
-    {
-        /*
-        //pregunta el estado del Producto
-        if(this.estado_pedido){
-            //si este esta vigente procedera a la eliminación
-            this.estado_producto = false;
-            String resultado = this.ModificarProducto();
-            if(resultado == "El Producto se modificó con éxito")
-                return "El Producto se eliminó con exito  (lógico)";
-            else
-                return resultado;
-        }
-        else
-            return "El Producto ya ha sido eliminado (lógico)";*/
-        return "";
+    public String EliminarPedido() {
+        return null;
     }
-
 
 }

@@ -24,15 +24,58 @@ public class ClienteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cliente);
 
 
+        //se obtienen los componenetes
         LinearLayout ll_idcliente = (LinearLayout)findViewById(R.id.ll_idcliente);
         TextView txv_idcliente = (TextView)findViewById(R.id.txv_idcliente);
         final EditText txt_nombre_cliente = (EditText)findViewById(R.id.txt_nombre_cliente);
         final CheckBox cb_estado_cliente = (CheckBox)findViewById(R.id.cb_estado_cliente);
         Button btn_gestionar_cliente  = (Button)findViewById(R.id.btn_gestionar_cliente);
         Button btn_eliminar_cliente  = (Button)findViewById(R.id.btn_eliminar_cliente);
-        Button btn_nuevo_pedido = (Button)findViewById(R.id.btn_nuevo_pedido);
+        Button btn_pedidos_cliente = (Button)findViewById(R.id.btn_pedidos_cliente);
+        Button btn_volver = (Button)findViewById(R.id.btn_volver);
 
+        //se setea el boton para ver los pedidos del cliente
+        btn_pedidos_cliente.setOnClickListener(new View.OnClickListener(){
 
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClienteActivity.this, PedidosActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("accion","listarpedidos");
+                bundle.putSerializable("cliente",(Serializable)cliente);
+                intent.putExtra("extras",bundle);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+        //se setea el boton para ver los pedidos del cliente
+        btn_eliminar_cliente.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClienteActivity.this, PedidosActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("accion","listarpedidos");
+                bundle.putSerializable("cliente",(Serializable)cliente);
+                intent.putExtra("extras",bundle);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+        //se setea un boton volver
+        btn_volver.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                finish();
+
+            }
+        });
+
+        //se genera la funcion de eliminar
         btn_eliminar_cliente.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -44,8 +87,8 @@ public class ClienteActivity extends AppCompatActivity {
             }
         });
 
-
-                Bundle bundle = getIntent().getExtras().getBundle("extras");
+        //se obtiene los valores enviados a la actividad
+        Bundle bundle = getIntent().getExtras().getBundle("extras");
         String accion = bundle.getString("accion"); //se recibe la accion que empleara esta activity
 
         if(accion.equals("editar")) {
@@ -74,6 +117,7 @@ public class ClienteActivity extends AppCompatActivity {
         {
             ll_idcliente.setVisibility(LinearLayout.GONE);
             btn_eliminar_cliente.setVisibility(View.GONE);
+            btn_pedidos_cliente.setVisibility(View.GONE);
             btn_gestionar_cliente.setText("Nuevo");
 
             //se indica que hará el boton de gestión

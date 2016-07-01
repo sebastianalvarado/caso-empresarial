@@ -4,5 +4,8 @@
     <dimen name="activity_horizontal_form_margin">36dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="textSizeForm">40sp</dimen>
+    <dimen name="textSizeForm">25sp</dimen>
+    <dimen name="textMarginRow">20sp</dimen>
+    <dimen name="minWidthRow">80dp</dimen>
+    <dimen name="paddingDivider">2dp</dimen>
 </resources>

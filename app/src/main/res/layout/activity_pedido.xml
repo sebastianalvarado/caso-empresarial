@@ -9,104 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cl.inacap.unidad1.activity.PedidoActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/txt_producto"
-        android:layout_marginTop="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/txt_fecha_pedido"
-        android:hint="Fecha"
-        android:layout_below="@+id/ll_idpedido"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cliente"
-        android:id="@+id/btn_cliente_pedido"
-        android:layout_below="@+id/txt_fecha_pedido"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/txv_cliente_pedido"
-        android:layout_below="@+id/txt_fecha_pedido"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/btn_cliente_pedido"
-        android:layout_toRightOf="@+id/btn_cliente_pedido"
-        android:layout_toEndOf="@+id/btn_cliente_pedido"
-        android:textSize="15dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Producto"
-        android:id="@+id/btn_producto_pedido"
-        android:layout_below="@+id/btn_cliente_pedido"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/txv_producto_pedido"
-        android:textSize="15dp"
-        android:layout_alignRight="@+id/txt_producto"
-        android:layout_alignEnd="@+id/txt_producto"
-        android:layout_toEndOf="@+id/cb_estado_pedido"
-        android:layout_above="@+id/txt_cantidad_pedido"
-        android:layout_alignTop="@+id/btn_producto_pedido"
-        android:layout_toRightOf="@+id/cb_estado_pedido" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/txv_precio_pedido"
-        android:layout_below="@+id/txt_cantidad_pedido"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Entregado"
-        android:id="@+id/cb_estado_pedido"
-        android:layout_marginTop="55dp"
-        android:layout_below="@+id/txv_precio_pedido"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:checked="false" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txt_cantidad_pedido"
-        android:layout_below="@+id/btn_producto_pedido"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Cantidad"
-        android:numeric="integer"
-        android:enabled="false" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -116,9 +18,7 @@
         android:id="@+id/ll_idpedido"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/txt_producto"
-        android:layout_alignEnd="@+id/txt_producto">
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -126,7 +26,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="ID"
             android:textIsSelectable="false"
-            android:textSize="40dp"
+            android:textSize="@dimen/textSizeForm"
             android:layout_weight="0.17" />
 
         <TextView
@@ -135,9 +35,98 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/txv_idpedido"
             android:textIsSelectable="false"
-            android:textSize="40dp"
+            android:textSize="@dimen/textSizeForm"
             android:layout_marginBottom="0dp" />
     </LinearLayout>
+
+
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/txt_fecha_pedido"
+        android:hint="Fecha"
+        android:textSize="@dimen/textSizeForm"
+        android:layout_below="@+id/ll_idpedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:height="75dp"
+        android:text="Cliente"
+        android:id="@+id/btn_cliente_pedido"
+        android:layout_below="@+id/txt_fecha_pedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/txt_cantidad_pedido"
+        android:layout_alignEnd="@+id/txt_cantidad_pedido" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Producto"
+        android:height="75dp"
+        android:id="@+id/btn_producto_pedido"
+        android:layout_below="@+id/btn_cliente_pedido"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btn_cliente_pedido" />
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/txt_cantidad_pedido"
+        android:hint="Cantidad"
+        android:numeric="integer"
+        android:textSize="@dimen/textSizeForm"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/btn_producto_pedido"
+        android:maxLength="4" />
+    <LinearLayout android:id="@+id/ll_cantidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_below="@+id/txt_cantidad_pedido">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:textSize="@dimen/textSizeForm"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txv_precio_pedido"
+            android:textSize="@dimen/textSizeForm"
+            android:layout_marginBottom="0dp" />
+    </LinearLayout>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entregado"
+        android:id="@+id/cb_estado_pedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false"
+        android:textSize="@dimen/textSizeForm"
+        android:layout_below="@+id/ll_cantidad"
+        android:layout_alignRight="@+id/txt_cantidad_pedido"
+        android:layout_alignEnd="@+id/txt_cantidad_pedido" />
+
 
     <Button
         android:layout_width="wrap_content"
@@ -145,15 +134,28 @@
         android:id="@+id/btn_gestionar_pedido"
         android:layout_below="@+id/cb_estado_pedido"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/txt_cantidad_pedido"
+        android:layout_alignEnd="@+id/txt_cantidad_pedido" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Eliminar"
         android:id="@+id/btn_eliminar_pedido"
-        android:layout_alignTop="@+id/btn_gestionar_pedido"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/btn_gestionar_pedido"
+        android:layout_alignRight="@+id/btn_gestionar_pedido"
+        android:layout_alignEnd="@+id/btn_gestionar_pedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_pedidos_cliente"
+        android:text="@string/volver"
+        android:layout_below="@+id/btn_eliminar_pedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

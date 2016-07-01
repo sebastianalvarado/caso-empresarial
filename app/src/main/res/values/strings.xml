@@ -18,4 +18,5 @@
     <string name="nuevo">Nuevo</string>
     <string name="nombre">Nombre</string>
     <string name="eliminar">Eliminar</string>
+    <string name="volver">volver</string>
 </resources>

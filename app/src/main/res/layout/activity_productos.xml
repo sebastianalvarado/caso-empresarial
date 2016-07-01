@@ -9,15 +9,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ProductosActivity">
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableRow">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pedidos"
+            android:layout_weight=".5"
+            android:id="@+id/btn_pedidos" />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Clientes"
+            android:layout_weight=".5"
+            android:id="@+id/btn_clientes" />
+    </TableRow>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lv_productos"
         android:clickable="true"
         android:choiceMode="singleChoice"
-        android:layout_below="@+id/btn_nuevo_producto"
         android:layout_alignParentRight="true"
-        android:background="#afafaf" />
+        android:layout_below="@+id/tableRow" />
 
     <Button
         android:layout_width="wrap_content"
