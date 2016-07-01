@@ -1,0 +1,44 @@
+[
+  {
+    "id_producto": 1,
+    "nombre_producto": "Producto Cool",
+    "precio_producto": 5000,
+    "estado_producto": true
+  },
+  {
+    "id_producto": 2,
+    "nombre_producto": "Producto Bien Barato",
+    "precio_producto": 200,
+    "estado_producto": true
+  },
+  {
+    "id_producto": 3,
+    "nombre_producto": "Producto Weno",
+    "precio_producto": 400,
+    "estado_producto": true
+  },
+  {
+    "id_producto": 4,
+    "nombre_producto": "Producto Promedio",
+    "precio_producto": 1500,
+    "estado_producto": true
+  },
+  {
+    "id_producto": 5,
+    "nombre_producto": "Producto Seleccion",
+    "precio_producto": 3000,
+    "estado_producto": true
+  },
+  {
+    "id_producto": 6,
+    "nombre_producto": "Producto Coleccion",
+    "precio_producto": 3000,
+    "estado_producto": true
+  },
+  {
+    "id_producto": 7,
+    "nombre_producto": "Vaya que buen Producto",
+    "precio_producto": 2500,
+    "estado_producto": true
+  }
+]

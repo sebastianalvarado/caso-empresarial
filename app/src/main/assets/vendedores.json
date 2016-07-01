@@ -1,0 +1,21 @@
+[
+  {
+    "id_vendedor" : 1,
+    "nombre_vendedor" : "Juan Perez",
+    "login_vendedor" : "juan",
+    "contrasena" : "juan"
+
+  },
+  {
+    "id_vendedor": 2,
+    "nombre_vendedor": "Sebastian Alvarado",
+    "login_vendedor": "salvarado",
+    "contrasena": "salvarado"
+  },
+  {
+    "id_vendedor": 3,
+    "nombre_vendedor": "Usuario Test",
+    "login_vendedor": "test",
+    "contrasena": "test"
+  }
+]
