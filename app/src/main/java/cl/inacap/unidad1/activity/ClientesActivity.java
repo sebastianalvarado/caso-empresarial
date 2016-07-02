@@ -9,21 +9,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.inacap.unidad1.adapter.ClientesAdapter;
 import cl.inacap.unidad1.clases.Cliente;
-import cl.inacap.unidad1.clases.JsonUtil;
-import cl.inacap.unidad1.clases.Producto;
 
 public class ClientesActivity extends AppCompatActivity {
 

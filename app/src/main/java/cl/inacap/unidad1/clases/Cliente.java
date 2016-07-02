@@ -224,7 +224,7 @@ public class Cliente implements Serializable {
                 values.put(this.COL_ESTADO_CLIENTE, this.estado_cliente ? 1 : 0);
                 //se genera la actualizacion del registro marcando al cliente con estado falso, indicando que no estie
                 OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_cliente = " + this.id_cliente, null);
-                return "Se elmino el cliente con exito";
+                return "Se elimino el cliente con exito";
             }
             else
                 return "El cliente ya ha sido eliminado (lógico)";
