@@ -26,7 +26,8 @@
         android:layout_alignLeft="@+id/txt_contrasena"
         android:layout_alignStart="@+id/txt_contrasena"
         android:layout_marginTop="49dp"
-        android:hint="Usuario">
+        android:hint="Usuario"
+        android:text="user1">
 
         <requestFocus />
     </EditText>
@@ -39,7 +40,8 @@
         android:inputType="textPassword"
         android:layout_below="@+id/txt_login"
         android:layout_centerHorizontal="true"
-        android:hint="Contraseña" />
+        android:hint="Contraseña"
+        android:text="user1" />
 
     <Button
         android:id="@+id/btn_ingresar"

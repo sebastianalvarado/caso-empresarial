@@ -26,6 +26,9 @@ public class Pedido implements Serializable {
     public String fecha_pedido;
     public int precio_pedido;
     public boolean estado_pedido;
+    public double longitud_pedido;
+    public double latitud_pedido;
+    public String direccion_pedido;
 
 
     //nombre de las columnas de la tabla
@@ -37,6 +40,10 @@ public class Pedido implements Serializable {
     private String COL_FECHA_PEDIDO = "fecha_pedido";
     private String COL_PRECIO_PEDIDO = "precio_pedido";
     private String COL_ESTADO_PEDIDO= "estado_pedido";
+
+    private String COL_LONGITUD_PEDIDO= "longitud_pedido";
+    private String COL_LATITUD_PEDIDO= "latitud_pedido";
+    private String COL_DIRECCION_PEDIDO= "direccion_pedido";
     //se juntan las columnas para generar los query con todas las columnas
     private String[] columnas = {
             this.COL_ID_PEDIDO,
@@ -46,7 +53,10 @@ public class Pedido implements Serializable {
             this.COL_CANTIDAD_PRODUCTO,
             this.COL_FECHA_PEDIDO,
             this.COL_PRECIO_PEDIDO,
-            this.COL_ESTADO_PEDIDO
+            this.COL_ESTADO_PEDIDO,
+            this.COL_LONGITUD_PEDIDO,
+            this.COL_LATITUD_PEDIDO,
+            this.COL_DIRECCION_PEDIDO
     };
     //se genera el nombre de la tabla para las llamadas a query
     private String nombreTabla = "pedido";
@@ -76,6 +86,10 @@ public class Pedido implements Serializable {
         pedido.precio_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_PRECIO_PEDIDO));
         //en la base de datos el estado es int, por lo tanto se transforma el valor de la clase (booleano) con su equivalente en int
         pedido.estado_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_ESTADO_PEDIDO)) == 1 ? true : false;
+
+        pedido.longitud_pedido = cursor.getDouble(cursor.getColumnIndex(this.COL_LONGITUD_PEDIDO));
+        pedido.latitud_pedido = cursor.getDouble(cursor.getColumnIndex(this.COL_LATITUD_PEDIDO));
+        pedido.direccion_pedido = cursor.getString(cursor.getColumnIndex(this.COL_DIRECCION_PEDIDO));
 
         return pedido;
 
@@ -108,6 +122,61 @@ public class Pedido implements Serializable {
             return null;
         }
     }
+
+    //lista de todos los pedidos del vendedor
+    public ArrayList<Pedido> listaPedidosPorVendedor()
+    {
+        try {
+        ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+        //se genera la consulta se los pedidos por cliente
+        Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas , this.COL_VENDEDOR + " = '"+ OperacionesBaseDatos.login_vendedor + "'", null, null, null, null);
+        cursor.moveToFirst();
+        //se recorre el cursor
+        while (!cursor.isAfterLast()) {
+            //se utiliza la funcion para pasar de cursor a la clase
+            Pedido pedido = cursorToPedido(cursor);
+            pedidos.add(pedido);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return pedidos;
+
+    }
+    catch (Exception e)
+    {
+        e.printStackTrace();
+        return null;
+    }
+    }
+
+    //lista de todos los pedidos del vendedor que aun no se entregan
+    public ArrayList<Pedido> listaPedidosPorVendedorSinEntregar()
+    {
+        try {
+            ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+            //se genera la consulta se los pedidos por cliente
+            Cursor cursor = OperacionesBaseDatos.obtenerInstancia().query(this.nombreTabla,this.columnas ,
+                    this.COL_VENDEDOR + " = '"+ OperacionesBaseDatos.login_vendedor + "'"
+                    + " AND " + this.COL_ESTADO_PEDIDO + " = 0", null, null, null, null);
+            cursor.moveToFirst();
+            //se recorre el cursor
+            while (!cursor.isAfterLast()) {
+                //se utiliza la funcion para pasar de cursor a la clase
+                Pedido pedido = cursorToPedido(cursor);
+                pedidos.add(pedido);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            return pedidos;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     //lista de los pedidos por cliente
     public ArrayList<Pedido> listaPedidosPorCliente(int id_cliente)
     {
@@ -148,6 +217,11 @@ public class Pedido implements Serializable {
             values.put(this.COL_PRECIO_PEDIDO, this.precio_pedido);
             //se trasnforma el booleando a int que es el tipo de datos de la base de datos
             values.put(this.COL_ESTADO_PEDIDO, (this.estado_pedido ? 1 : 0));
+
+            values.put(this.COL_LONGITUD_PEDIDO, this.longitud_pedido);
+            values.put(this.COL_LATITUD_PEDIDO, this.latitud_pedido);
+            values.put(this.COL_DIRECCION_PEDIDO, this.direccion_pedido);
+
             //se genera la query de inserción reconociendo errores
             long insert = OperacionesBaseDatos.escribirInstancia().insertOrThrow(this.nombreTabla, null, values);
             if (insert > 0){
@@ -175,6 +249,12 @@ public class Pedido implements Serializable {
             values.put(this.COL_PRECIO_PEDIDO, this.precio_pedido);
             //se trasnforma el booleando a int que es el tipo de datos de la base de datos
             values.put(this.COL_ESTADO_PEDIDO, this.estado_pedido ? 1 : 0);
+
+
+            values.put(this.COL_LONGITUD_PEDIDO, this.longitud_pedido);
+            values.put(this.COL_LATITUD_PEDIDO, this.latitud_pedido);
+            values.put(this.COL_DIRECCION_PEDIDO, this.direccion_pedido);
+
             //se genera la consulta de update
             OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_pedido = " + this.id_pedido, null);
             return "Se modifico el pedido con exito";

@@ -48,6 +48,7 @@ public class PedidosAdapter extends ArrayAdapter<Pedido> {
         TextView txv_row_precio_pedido = (TextView) rowView.findViewById(R.id.txv_row_precio_pedido);
         TextView txv_row_catidad_producto = (TextView) rowView.findViewById(R.id.txv_row_catidad_producto);
         TextView txv_row_vendedor = (TextView) rowView.findViewById(R.id.txv_row_vendedor);
+        TextView txv_row_direccion = (TextView) rowView.findViewById(R.id.txv_row_direccion);
 
 
         // se le asigna el valor a mostrar en los componentes
@@ -64,7 +65,7 @@ public class PedidosAdapter extends ArrayAdapter<Pedido> {
         txv_row_precio_pedido.setText(String.valueOf(lista.get(position).precio_pedido));
         txv_row_catidad_producto.setText(String.valueOf(lista.get(position).cantidad_producto));
         txv_row_vendedor.setText(lista.get(position).vendedor);
-
+        txv_row_direccion.setText(lista.get(position).direccion_pedido);
         //si no esta entregada, se cambia el color de fondo
         if(!lista.get(position).estado_pedido)
             rowView.setBackgroundColor(Color.parseColor("#FED453"));

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,44 +30,13 @@ public class ClientesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clientes);
 
         Button btn_nuevo_cliente = (Button)findViewById(R.id.btn_nuevo_cliente);
-        Button btn_pedidos = (Button)findViewById(R.id.btn_pedidos);
-        Button btn_productos = (Button)findViewById(R.id.btn_clientes);
-
-        //Se declaran las funciones de los botones
-        btn_productos.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(ClientesActivity.this, ProductosActivity.class);
-                ClientesActivity.this.startActivity(intent);
-
-            }
-
-        });
-
-
-        btn_pedidos.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(ClientesActivity.this, PedidosActivity.class);
-                ClientesActivity.this.startActivity(intent);
-
-            }
-
-        });
-
-
+        clientePedido = false;
         //se obtiene el valor enviado para saber desde que actividad proviene
         if(getIntent().hasExtra("extras")) {
             Bundle bundle = getIntent().getExtras().getBundle("extras");
             //si proviene de pedido se ocultan los botones para solo mostrar la lista
             if(bundle.getString("accion").equals("clientepedido")) {
                 btn_nuevo_cliente.setVisibility(View.GONE);
-                btn_pedidos.setVisibility(View.GONE);
-                btn_productos.setVisibility(View.GONE);
                 //se setea el valor, conociendo que viene desde pedidos para reconocerlo en toda la clase
                 clientePedido = true;
             }
@@ -151,4 +123,45 @@ public class ClientesActivity extends AppCompatActivity {
         //refresca la tabla en caso de volver de siguiente ventana (Cliente)
         llenarListaClientes();
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        //se inicializa el menu
+        if(!clientePedido){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.layout.menu, menu);
+        menu.getItem(0).setTitle("Pedidos");
+        menu.getItem(1).setTitle("Productos");
+        return true;
+        }
+        return false;
+    }
+
+    //se les da las funciones a los item del menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Intent intent = null;
+        switch (item.getItemId())
+        {
+            case R.id.menu_uno:
+                intent = new Intent(ClientesActivity.this, PedidosActivity.class);
+                ClientesActivity.this.startActivity(intent);
+                return true;
+
+            case R.id.menu_dos:
+                intent = new Intent(ClientesActivity.this, ProductosActivity.class);
+                ClientesActivity.this.startActivity(intent);
+                return true;
+            case R.id.menu_mis_rutas:
+                intent = new Intent(ClientesActivity.this, RutasActivity.class);
+                ClientesActivity.this.startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

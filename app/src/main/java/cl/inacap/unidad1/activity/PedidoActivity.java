@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.nio.BufferUnderflowException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +49,7 @@ public class PedidoActivity extends AppCompatActivity {
         final Button btn_cliente_pedido = (Button)findViewById(R.id.btn_cliente_pedido);
         Button btn_producto_pedido = (Button)findViewById(R.id.btn_producto_pedido);
         Button btn_gestionar_pedido = (Button)findViewById(R.id.btn_gestionar_pedido);
+        Button btn_mapa = (Button)findViewById(R.id.btn_mapa);
         Button btn_eliminar_pedido = (Button)findViewById(R.id.btn_eliminar_pedido);
         final CheckBox cb_estado_pedido = (CheckBox)findViewById(R.id.cb_estado_pedido);
         Button btn_volver = (Button)findViewById(R.id.btn_pedidos_cliente);
@@ -126,6 +128,25 @@ public class PedidoActivity extends AppCompatActivity {
 
         });
 
+        //se setea el boton para el mapa
+        btn_mapa.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(PedidoActivity.this, MapaActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("accion","clientepedido");
+                bundle.putSerializable("pedido",pedido);
+                intent.putExtra("extras",bundle);
+                //http://stackoverflow.com/questions/920306/sending-data-back-to-the-main-activity-in-android
+                PedidoActivity.this.startActivityForResult( intent, 3);
+
+
+            }
+
+        });
+
 
         //se busca que accion se hara
         Bundle bundle = null;
@@ -148,6 +169,7 @@ public class PedidoActivity extends AppCompatActivity {
             cb_estado_pedido.setChecked(pedido.estado_pedido);
             btn_cliente_pedido.setText(cliente.toString());
             btn_producto_pedido.setText(producto.toString());
+            btn_mapa.setText(pedido.direccion_pedido);
 
             btn_gestionar_pedido.setOnClickListener(new View.OnClickListener() {
 
@@ -238,6 +260,27 @@ public class PedidoActivity extends AppCompatActivity {
                 //Write your code if there's no result
             }
         }
+
+
+        //request 3 es el del mapa
+        if (requestCode == 3 ) {
+            if(resultCode == Activity.RESULT_OK){
+                Button btn_mapa = (Button)findViewById(R.id.btn_mapa);
+                //una vez recibido el valor se setea en la variable globlar
+                String[] mapa = data.getExtras().getStringArray("mapapedido");
+                pedido.longitud_pedido = Double.parseDouble(mapa[0]);
+                pedido.latitud_pedido = Double.parseDouble(mapa[1]);
+                pedido.direccion_pedido = mapa[2];
+                btn_mapa.setText(mapa[2]);
+                //aqui se pregunta si ya se ingreso la cantidad de productos,
+                // para una vez insertado el producto se calcule automaticamente
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+
     }
 
     //funcionalidad para actualizar la actividad una vez que se agrega un pedido

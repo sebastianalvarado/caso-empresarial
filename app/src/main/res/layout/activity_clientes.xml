@@ -9,35 +9,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cl.inacap.unidad1.activity.ClientesActivity">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tableRow">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Pedidos"
-            android:layout_weight=".5"
-            android:id="@+id/btn_pedidos" />
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Productos"
-            android:layout_weight=".5"
-            android:id="@+id/btn_clientes" />
-    </TableRow>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nuevo"
         android:id="@+id/btn_nuevo_cliente"
-        android:layout_below="@+id/tableRow"
-        android:layout_alignRight="@+id/tableRow"
-        android:layout_alignEnd="@+id/tableRow"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/lv_clientes"
+        android:layout_alignEnd="@+id/lv_clientes" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -48,8 +28,6 @@
         android:layout_below="@+id/btn_nuevo_cliente"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_alignRight="@+id/tableRow"
-        android:layout_alignEnd="@+id/tableRow"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

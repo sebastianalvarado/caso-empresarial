@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -73,13 +76,25 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Mapa"
+        android:height="75dp"
+        android:id="@+id/btn_mapa"
+        android:layout_below="@+id/btn_cliente_pedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btn_cliente_pedido"
+        android:layout_alignEnd="@+id/btn_cliente_pedido" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Producto"
         android:height="75dp"
         android:id="@+id/btn_producto_pedido"
-        android:layout_below="@+id/btn_cliente_pedido"
+        android:layout_below="@+id/btn_mapa"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/btn_cliente_pedido" />
+        android:layout_alignRight="@+id/btn_mapa" />
 
 
     <EditText
@@ -128,6 +143,7 @@
         android:layout_alignEnd="@+id/txt_cantidad_pedido" />
 
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -137,6 +153,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/txt_cantidad_pedido"
         android:layout_alignEnd="@+id/txt_cantidad_pedido" />
+
 
     <Button
         android:layout_width="wrap_content"
@@ -159,3 +176,4 @@
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>
+</ScrollView>

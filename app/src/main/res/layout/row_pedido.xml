@@ -75,6 +75,22 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/txv_row_producto"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Direccion"
+            android:minWidth="@dimen/minWidthRow"
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/txv_row_direccion"/>
+    </LinearLayout>
     <TableRow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

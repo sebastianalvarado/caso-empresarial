@@ -60,6 +60,11 @@ public class PedidoTest extends ActivityUnitTestCase<PedidoActivity> {
         pedidoTest.precio_pedido = pedidoTest.cantidad_producto * productoTest.precio_producto;
         pedidoTest.estado_pedido = false;
 
+        //se agregan los nuevos atributos al test
+        pedidoTest.latitud_pedido = -33.4440495;
+        pedidoTest.longitud_pedido = -70.6495182;
+        pedidoTest.direccion_pedido = "Serrano 15, Santiago, Región Metropolitana, Chile";
+
         //una ves agregado los valores del pedido, se prueba si este ha sido agregado
         assertSame("Pedido agregado con exito",pedidoTest.AgregarPedido());
 
@@ -81,5 +86,15 @@ public class PedidoTest extends ActivityUnitTestCase<PedidoActivity> {
         assertSame("Se modifico el pedido con exito",pedidoTest.ModificarPedido());
         //a la vez se validara que realmente se haya quedado en el estado
         assertTrue(pedidoTest.estado_pedido);
+    }
+
+    //en esta prueba se validará si el usuario tiene pedidos
+    public void testTraerPedidosUsuario() throws Exception {
+        pedidoTest = new Pedido();
+        OperacionesBaseDatos.login_vendedor = "user1";
+        //primero obtendremos la lista de los pedidos
+        ArrayList<Pedido> listaPedidos = pedidoTest.listaPedidosPorVendedor();
+        //se valida si se encuentra pedido
+        assertTrue(listaPedidos.size() > 0);
     }
 }

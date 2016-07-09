@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,41 +26,11 @@ import cl.inacap.unidad1.clases.Producto;
 public class ProductosActivity extends AppCompatActivity {
 
     private ArrayAdapter<Producto> adapter;
-
+    private boolean productoPedido = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
-
-
-
-        Button btn_clientes  = (Button)findViewById(R.id.btn_clientes);
-        Button btn_pedidos = (Button)findViewById(R.id.btn_pedidos);
-
-        //seteo de botones para el resto de los formularios
-        btn_clientes.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(ProductosActivity.this, ClientesActivity.class);
-                ProductosActivity.this.startActivity(intent);
-
-            }
-
-        });
-
-        btn_pedidos.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(ProductosActivity.this, PedidosActivity.class);
-                ProductosActivity.this.startActivity(intent);
-
-            }
-
-        });
 
         //se llena la lista de productos
         llenarListaProductos();
@@ -73,19 +46,16 @@ public class ProductosActivity extends AppCompatActivity {
         ListView lv_producto = (ListView)findViewById(R.id.lv_productos);
         Producto producto = new Producto();
         ArrayList<Producto> productos = producto.listaProductos();
-
+        productoPedido = false;
         //se pregunta si la cponsulta  ala activdad proviene de la actividad de pedidos
         //de ser asi oculta los botones que acceden al resto de los formularios
         //y se actualiza la lista de productos a los disponibles
         if (getIntent().hasExtra("extras")) {
             Bundle bundle = getIntent().getExtras().getBundle("extras");
             if(bundle.getString("accion").equals("productopedido")) {
+                productoPedido = true;
                 productos = producto.listaProductosDisponibles(); //lista de solo disponibles
-                //se ocultan los botones
-                Button btn_clientes  = (Button)findViewById(R.id.btn_clientes);
-                Button btn_pedidos = (Button)findViewById(R.id.btn_pedidos);
-                btn_clientes.setVisibility(View.GONE);
-                btn_pedidos.setVisibility(View.GONE);
+
                 //en caso de ser llamado desde pedidos los item puedes ser seleccionados par el pedido
                 lv_producto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -104,13 +74,52 @@ public class ProductosActivity extends AppCompatActivity {
             productos = producto.listaProductos();
         }
 
-
-        //adapter = new ArrayAdapter<Producto>(getApplicationContext(), android.R.layout.simple_spinner_item, productos);
         adapter = new ProductosAdapter(this,productos);
         lv_producto.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
 
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        //se inicializa el menu
+        if(!productoPedido) {
+            MenuInflater menuInflater = getMenuInflater();
+            menuInflater.inflate(R.layout.menu, menu);
+            menu.getItem(0).setTitle("Clientes");
+            menu.getItem(1).setTitle("Pedidos");
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        //se les da las funciones a los item del menu
+        Intent intent = null;
+        switch (item.getItemId())
+        {
+            case R.id.menu_uno:
+                intent = new Intent(ProductosActivity.this, ClientesActivity.class);
+                ProductosActivity.this.startActivity(intent);
+                return true;
+
+            case R.id.menu_dos:
+                intent = new Intent(ProductosActivity.this, PedidosActivity.class);
+                ProductosActivity.this.startActivity(intent);
+                return true;
+
+            case R.id.menu_mis_rutas:
+                intent = new Intent(ProductosActivity.this, RutasActivity.class);
+                ProductosActivity.this.startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
