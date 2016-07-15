@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Genera el fondo de la aplicación en las activitis que se integre
+ con imagen de camion, transparecia u opacidad del 0.5 y se repite por t'odo el fondo-->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@mipmap/ic_camion"
+    android:alpha="0.5"
+    android:tileMode="repeat" />

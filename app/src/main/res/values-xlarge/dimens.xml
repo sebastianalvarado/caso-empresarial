@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_form_margin">36dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="textSizeForm">25sp</dimen>
+    <dimen name="textMarginRow">20sp</dimen>
+    <dimen name="minWidthRow">100dp</dimen>
+    <dimen name="paddingDivider">2dp</dimen>
+    <dimen name="paddingButton">0dp</dimen>
+    <dimen name="textSizePedido">200dp</dimen>
+    <dimen name="minWidthRowPedido">50dp</dimen>
+</resources>

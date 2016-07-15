@@ -7,8 +7,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cl.inacap.unidad1.activity.RutasActivity">
-
+    tools:context="cl.inacap.unidad1.activity.RutasActivity"
+    android:background="@drawable/app_background">
+    <!-- EN el caso de la pantalla mediana, la lista de las direcciones se encuentra arriba
+    y el mapa se dibuja bajo-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

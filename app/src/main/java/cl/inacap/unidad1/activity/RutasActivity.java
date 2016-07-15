@@ -110,9 +110,15 @@ public class RutasActivity extends FragmentActivity implements LocationListener 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if(location != null){
             LatLng origin = new LatLng(location.getLatitude(),location.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"Localidad no disponible",Toast.LENGTH_SHORT);
+            }
         }
 
         //aqui seteamos si el usuario presiona el boton para marcar la localidad actual

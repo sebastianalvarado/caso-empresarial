@@ -7,30 +7,37 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MapaActivity">
+    tools:context=".MapaActivity"
+    android:background="@drawable/app_background">
 
-
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_direccion_pedido"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="DIRECCIÓN"/>
-
+        android:id="@+id/linearLayout1"
+        android:background="#FFF"
+        android:layout_marginBottom="@dimen/marginBottomButton">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/txt_direccion_pedido"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="DIRECCIÓN"/>
+    </LinearLayout>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Buscar Dirección"
         android:id="@+id/btn_buscar_direccion"
-        android:layout_below="@+id/txt_direccion_pedido"
+        android:layout_below="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/txt_direccion_pedido"
-        android:layout_alignEnd="@+id/txt_direccion_pedido" />
+        android:layout_alignRight="@+id/linearLayout1"
+        android:layout_alignEnd="@+id/linearLayout1"
+        android:layout_marginBottom="@dimen/marginBottomButton"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -41,7 +48,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/btn_buscar_direccion"
-        android:layout_alignEnd="@+id/btn_buscar_direccion" />
+        android:layout_alignEnd="@+id/btn_buscar_direccion"
+        android:layout_marginBottom="@dimen/marginBottomButton" />
 
     <fragment
         android:id="@+id/map"

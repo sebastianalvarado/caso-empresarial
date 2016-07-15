@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <item android:id="@+id/menu_uno"
-        android:title="" />
+        android:title=""/>
 
     <item android:id="@+id/menu_dos"
         android:title="" />
 
     <item android:id="@+id/menu_mis_rutas"
-        android:title="Mis Rutas" />
+        android:title="@string/mis_rutas" />
 
 </menu >

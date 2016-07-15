@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cl.inacap.unidad1.activity.PedidosActivity"
-    android:isScrollContainer="true">
+    android:isScrollContainer="true"
+    android:background="@drawable/app_background">
 
     <TableRow
         android:layout_width="match_parent"
@@ -18,11 +19,15 @@
         <ToggleButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Clientes"
             android:textOff="Mis pedidos"
             android:textOn="Mis pedidos"
             android:layout_weight=".5"
-            android:id="@+id/tbtn_mis_pedidos" />
+            android:id="@+id/tbtn_mis_pedidos"
+            android:textColor="@android:color/white"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/tgl_btn_azul"/>
     </TableRow>
     <Button
         android:layout_width="match_parent"
@@ -31,7 +36,12 @@
         android:id="@+id/btn_rutas"
         android:layout_below="@+id/tableRow2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:drawableLeft="@mipmap/ic_rutas"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_azul"
+        android:textStyle="bold"
+        android:textColor="@android:color/white">
     </Button>
     <Button
         android:layout_width="match_parent"
@@ -40,7 +50,12 @@
         android:id="@+id/btn_nuevo_pedido"
         android:layout_below="@+id/btn_rutas"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:drawableLeft="@mipmap/ic_agregar"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_azul"
+        android:textStyle="bold"
+        android:textColor="@android:color/white">
     </Button>
     <ListView
         android:layout_width="match_parent"
@@ -49,6 +64,7 @@
         android:textFilterEnabled="false"
         android:dividerHeight="10dp"
         android:layout_below="@+id/btn_nuevo_pedido"
+        android:layout_marginBottom="5dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
     </ListView>

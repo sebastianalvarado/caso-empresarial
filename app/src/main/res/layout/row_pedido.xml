@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:weightSum="1"
     android:background="@drawable/list_divider">
-
+    <!-- El pedido en formato de pantalla normal solo tiene los simbolos del pedido sin los
+    nombres de identificando de la información-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -13,9 +14,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Pedido"
-            android:minWidth="@dimen/minWidthRow"
-            android:id="@+id/textView" />
+            android:text=""
+            android:minWidth="@dimen/minWidthRowPedido"
+            android:id="@+id/txv_row_texto_pedido"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,11 +46,13 @@
 
             <TextView
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Cliente"
-                android:minWidth="@dimen/minWidthRow"
+                android:text=""
+                android:minWidth="@dimen/minWidthRowPedido"
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_cliente"
+                android:padding="@dimen/paddingButton"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,11 +66,13 @@
         android:layout_height="wrap_content">
             <TextView
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Producto"
-                android:minWidth="@dimen/minWidthRow"
+                android:text=""
+                android:minWidth="@dimen/minWidthRowPedido"
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_producto"
+                android:padding="@dimen/paddingButton"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,11 +85,13 @@
         android:layout_height="wrap_content">
         <TextView
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Direccion"
-            android:minWidth="@dimen/minWidthRow"
+            android:text=""
+            android:minWidth="@dimen/minWidthRowPedido"
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/ic_direccion"
+            android:padding="@dimen/paddingButton"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:layout_marginRight="@dimen/minWidthRow">
+            android:layout_marginRight="@dimen/minWidthRowPedido">
         <TextView
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Cantidad"

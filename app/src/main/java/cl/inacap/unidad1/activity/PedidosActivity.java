@@ -72,10 +72,16 @@ public class PedidosActivity extends AppCompatActivity {
 
         Pedido pedido = new Pedido();
         ArrayList<Pedido> pedidos = null;
-        if(tbtn_mis_pedidos.isChecked())
+        if(tbtn_mis_pedidos.isChecked()) {
+            //si el boton ha sido seleccionado se dibuja la estrella rellena identificando su marca
+            tbtn_mis_pedidos.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_selector_on,0,0,0);
             pedidos = pedido.listaPedidosPorVendedor();
-        else
+        }
+        else {
+            //si el botón no ha sido deseleccionado se dibuja la estrella sin relleno
+            tbtn_mis_pedidos.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_selector_off,0,0,0);
             pedidos = pedido.listaPedidos();
+        }
         //en caso de venir desde cliente, se buscaran solo los pedidos asociados a el
         //y se ocultan los botones para solo mostrar la lista
         Bundle bundle = null;

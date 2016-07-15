@@ -1,7 +1,12 @@
 package cl.inacap.unidad1.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.renderscript.Allocation;
+import android.service.dreams.DreamService;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +47,7 @@ public class PedidosAdapter extends ArrayAdapter<Pedido> {
         View rowView = inflater.inflate(R.layout.row_pedido, parent, false);
 
         // obtiene los componentes de "row_pedidos.xml"
+        TextView txv_row_texto_pedido = (TextView) rowView.findViewById(R.id.txv_row_texto_pedido);
         TextView txv_row_id_pedido = (TextView) rowView.findViewById(R.id.txv_row_id_pedido);
         TextView txv_row_cliente = (TextView) rowView.findViewById(R.id.txv_row_cliente);
         TextView txv_row_producto = (TextView) rowView.findViewById(R.id.txv_row_producto);
@@ -66,9 +72,17 @@ public class PedidosAdapter extends ArrayAdapter<Pedido> {
         txv_row_catidad_producto.setText(String.valueOf(lista.get(position).cantidad_producto));
         txv_row_vendedor.setText(lista.get(position).vendedor);
         txv_row_direccion.setText(lista.get(position).direccion_pedido);
+        txv_row_texto_pedido.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_pedido_entregado,0,0,0);
+        //setea imagen de pedido entregado
+        rowView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+
         //si no esta entregada, se cambia el color de fondo
-        if(!lista.get(position).estado_pedido)
+        if(!lista.get(position).estado_pedido) {
             rowView.setBackgroundColor(Color.parseColor("#FED453"));
+            //cambia la imagen ppor defecto agregada anteriormente
+            txv_row_texto_pedido.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_pedido_no_entregado,0,0,0);
+        }
+
         // se devuelve el item
         return rowView;
     }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Genera un botón con tonalidades azules. Este botón es para ToggleButton, de la lista
+ de pedidos
+El primer item refiere a la accion de seleccion del botón, que entrega un color plano
+El segundo item refiere a la acción de no selección del botón sin accionar, que entrega un degrade-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true" >
+        <shape>
+            <gradient
+                android:startColor="#2f6699"
+                android:centerColor="#449def"
+                android:endColor="#2f6699"
+                android:angle="270" />
+
+            <stroke
+                android:width="1dp"
+                android:color="#2f6699" />
+            <corners
+                android:radius="4dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+    <item android:state_checked="false">
+        <shape>
+            <gradient
+                android:startColor="#449def"
+                android:endColor="#2f6699"
+                android:angle="270" />
+            <stroke
+                android:width="1dp"
+                android:color="#2f6699" />
+            <corners
+                android:radius="4dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+        </shape>
+    </item>
+</selector>

@@ -8,4 +8,7 @@
     <dimen name="textMarginRow">20sp</dimen>
     <dimen name="minWidthRow">80dp</dimen>
     <dimen name="paddingDivider">2dp</dimen>
+    <dimen name="paddingButton">0dp</dimen>
+    <dimen name="minWidthRowPedido">50dp</dimen>
+    <dimen name="marginBottomButton">5dp</dimen>
 </resources>

@@ -3,11 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/list_divider">
-
+    <!-- A la ruta se le agrega el icono de identificacion asignado a la direccion-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/txv_row_ruta" />
+        android:id="@+id/txv_row_ruta"
+        android:drawableLeft="@mipmap/ic_direccion"/>
 </LinearLayout>

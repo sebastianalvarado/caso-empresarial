@@ -98,7 +98,7 @@ public class ClienteActivity extends AppCompatActivity {
             txv_idcliente.setText(String.valueOf(cliente.id_cliente));
             txt_nombre_cliente.setText(String.valueOf(cliente.nombre_cliente));
             cb_estado_cliente.setChecked(cliente.estado_cliente);
-            cb_estado_cliente.setClickable(!cliente.estado_cliente);
+            cb_estado_cliente.setClickable(true);
             //se indica que hará el boton de gestión
             btn_gestionar_cliente.setOnClickListener(new View.OnClickListener(){
 

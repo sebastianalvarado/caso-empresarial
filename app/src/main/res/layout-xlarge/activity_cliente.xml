@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_form_margin"
+    android:paddingRight="@dimen/activity_horizontal_form_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="cl.inacap.unidad1.activity.ClienteActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:id="@+id/ll_idcliente"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="ID"
+            android:textIsSelectable="false"
+            android:textSize="40dp"
+            android:layout_weight="0.17" />
+
+        <TextView
+            android:layout_width="177dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txv_idcliente"
+            android:textIsSelectable="false"
+            android:textSize="40dp"
+            android:layout_marginBottom="0dp" />
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_nombre_cliente"
+        android:hint="@string/nombre"
+        android:textSize="@dimen/textSizeForm"
+        android:maxLines="2"
+        android:layout_below="@+id/ll_idcliente"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activo"
+        android:id="@+id/cb_estado_cliente"
+        android:textSize="@dimen/textSizeForm"
+        android:checked="true"
+        android:clickable="false"
+        android:button="@drawable/cb_valido"
+        android:layout_below="@+id/txt_nombre_cliente"
+        android:contextClickable="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/marginBottomButton"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_gestionar_cliente"
+        android:textSize="30dp"
+        android:layout_below="@+id/cb_estado_cliente"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:drawableLeft="@mipmap/ic_grabar"
+        android:layout_marginBottom="@dimen/marginBottomButton"
+        android:background="@drawable/btn_verde"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_eliminar_cliente"
+        android:text="@string/eliminar"
+        android:textSize="30dp"
+        android:layout_below="@+id/btn_gestionar_cliente"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:drawableLeft="@mipmap/ic_eliminar"
+        android:layout_marginBottom="@dimen/marginBottomButton"
+        android:background="@drawable/btn_rojo"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_pedidos_cliente"
+        android:text="Pedidos Cliente"
+        android:textSize="30dp"
+        android:layout_below="@+id/btn_eliminar_cliente"
+        android:layout_marginBottom="@dimen/marginBottomButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_volver"
+        android:text="@string/volver"
+        android:textSize="30dp"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/btn_pedidos_cliente"
+        android:drawableLeft="@mipmap/ic_volver"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

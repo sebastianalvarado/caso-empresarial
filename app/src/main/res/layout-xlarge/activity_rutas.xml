@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="cl.inacap.unidad1.activity.RutasActivity"
+    android:background="@drawable/app_background">
+    <!-- En el caso de la pantalla grande la lista de las direcciones se escribe a la izquierda
+     y el mapa se sibuja a la derecha-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:weightSum="3">
+
+        <ListView
+            android:layout_width="223dp"
+            android:layout_height="match_parent"
+            android:id="@+id/lv_rutas"
+            android:layout_weight="1.25"/>
+
+        <fragment
+            android:id="@+id/rutas_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.MapFragment"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1.75"/>
+    </LinearLayout>
+
+</RelativeLayout>

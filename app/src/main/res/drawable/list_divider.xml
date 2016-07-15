@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Se implementan algunos formalos a los item (row) de los listview -->
-    <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle" >
-    <stroke android:width="1dp"  android:color="@color/colorPrimary" />
-    <padding android:bottom="@dimen/paddingDivider"
-        android:left="@dimen/paddingDivider"
-        android:right="@dimen/paddingDivider"
-        android:top="@dimen/paddingDivider"></padding>
-</shape>
+<!--Se implementan algunos formalos a los item (row) de los listview
+ Estos tienen un color plano azul-->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <shape>
+            <gradient
+                android:startColor="#449def"
+                android:centerColor="#449def"
+                android:endColor="#449def"
+                android:angle="270" />
+            <stroke
+                android:width="1dp"
+                android:color="#2f6699" />
+            <corners
+                android:radius="4dp" />
+            <padding
+                android:left="10dp"
+                android:top="10dp"
+                android:right="10dp"
+                android:bottom="10dp" />
+    </shape>
+    </item>
+</selector>
