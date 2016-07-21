@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="cl.inacap.unidad1.activity.ConfiguracionActivity">
+
+
+    <LinearLayout
+        android:id="@+id/ly_fecha"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/configuracion_fecha"
+            android:id="@+id/txv_titulo_fecha"/>
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/configuracion_defecto"
+            android:id="@+id/cb_fecha_defecto"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ly_configuracion_fecha">
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rg_radio_fecha">
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/configuracion_fecha_dd_MM_aaaa"
+                    android:id="@+id/dd_MM_yyyy"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/configuracion_fecha_dd_MMM_aaaa"
+                    android:id="@+id/dd_MMM_yyyy"/>
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/configuracion_fecha_MM_dd_aaaa"
+                    android:id="@+id/MM_dd_yyyy"/>
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/configuracion_fecha_MMM_dd_aaaa"
+                    android:id="@+id/MMM_dd_yyyy"/>
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/space"
+        android:layout_below="@+id/ly_fecha"
+        android:background="#c0c0c0"/>
+
+
+    <LinearLayout
+        android:id="@+id/ly_moneda"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/configuracion_moneda"
+            android:id="@+id/txv_titulo_moneda"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/ly_configuracion_moneda">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rg_radio_moneda">
+
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/configuracion_dolares_americanos"
+                    android:id="@+id/USD"/>
+                <RadioButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/configuracion_pesos_chilenos"
+                    android:id="@+id/CLP"/>
+
+            </RadioGroup>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Equivalente a Dolar"
+                android:inputType="numberDecimal"
+                android:id="@+id/txt_valor_moneda"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ly_moneda"
+        android:id="@+id/btn_configuracion_editar"
+        android:text="@string/editar"
+        android:background="@drawable/btn_azul"/>
+
+
+</RelativeLayout>
