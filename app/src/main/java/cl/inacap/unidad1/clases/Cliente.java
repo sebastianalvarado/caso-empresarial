@@ -45,6 +45,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import cl.inacap.unidad1.activity.R;
+
 public class Cliente implements Serializable {
 
     public int id_cliente;
@@ -64,7 +66,10 @@ public class Cliente implements Serializable {
     //valor string del cliente
     public String toString()
     {
-        return String.valueOf(this.id_cliente) + " : " + this.nombre_cliente + " (" + (this.estado_cliente ? "disponible" : "no disponible")+ ")";
+        return String.valueOf(this.id_cliente) + " : "
+                + this.nombre_cliente
+                + " (" + (this.estado_cliente ? obtenerRecursoString(R.string.disponible)
+                                            : obtenerRecursoString(R.string.no_disponible) )+ ")";
     }
 
     //se traen todos los clientes
@@ -138,7 +143,7 @@ public class Cliente implements Serializable {
             //si existe resultado entrará al cursor indicando que ya existe un cliente con ese nombre
             if(cursor.moveToFirst()) {
                 cliente = cursorToCliente(cursor);
-                return "El cliente ya existe. Intente con otro nombre";
+                return obtenerRecursoString(R.string.cliente_agrega_existe);
             }
             else {
                 //se crea un contenedor de valores para agregarlo a la base de datos
@@ -151,15 +156,15 @@ public class Cliente implements Serializable {
                 if(insert > 0) {
                     //se entrega el id del cliente para su reconocimiento en los pedidos
                     this.id_cliente = Integer.parseInt("" + insert);
-                    return "Cliente agregado con exito";
+                    return  obtenerRecursoString(R.string.cliente_agrega_exito);
                 }
                 else
-                    return "Error al intentar crear cliente";
+                    return obtenerRecursoString(R.string.cliente_agrega_error);
             }
         } catch (Exception e) {
             Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
-            return "Error al intentar agregar un clientes";
+            return obtenerRecursoString(R.string.cliente_agrega_error_exp);
         }
     }
 
@@ -192,7 +197,7 @@ public class Cliente implements Serializable {
             //en caso de que el cursor tenga resultado entrará al if indicando que se encontró un cliente con ese nombre
             if(cursor.moveToFirst()) {
                 cliente = cursorToCliente(cursor);
-                return "El cliente ya existe. Intente con otro nombre";
+                return obtenerRecursoString(R.string.cliente_agrega_existe);
             }
             else {
                 //si no se encuentra, se crea el contenedor de datos para enviar una actualizacion
@@ -203,12 +208,12 @@ public class Cliente implements Serializable {
 
                 //se mandan los datos para modificar el registro
                 OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_cliente = " + this.id_cliente, null);
-                return "Se modifico el cliente con exito";
+                return obtenerRecursoString(R.string.cliente_modifica_exito);
             }
         } catch (Exception e) {
             Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
-            return "Error al intentar recuperar el cliente";
+            return obtenerRecursoString(R.string.cliente_modifica_error_exp);
         }
     }
 
@@ -224,14 +229,20 @@ public class Cliente implements Serializable {
                 values.put(this.COL_ESTADO_CLIENTE, this.estado_cliente ? 1 : 0);
                 //se genera la actualizacion del registro marcando al cliente con estado falso, indicando que no estie
                 OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_cliente = " + this.id_cliente, null);
-                return "Se elimino el cliente con exito";
+                return obtenerRecursoString(R.string.cliente_elimina_exito);
             }
             else
-                return "El cliente ya ha sido eliminado (lógico)";
+                return obtenerRecursoString(R.string.cliente_elimina_error);
         } catch (Exception e) {
             Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
-            return "Error al intentar elminar el cliente";
+            return obtenerRecursoString(R.string.cliente_elimina_error_exp);
         }
     }
+
+    private String obtenerRecursoString(int recurso)
+    {
+        return OperacionesBaseDatos.mi_contexto.getResources().getString(recurso);
+    }
+
 }

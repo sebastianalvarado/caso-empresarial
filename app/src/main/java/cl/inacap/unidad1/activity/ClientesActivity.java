@@ -132,8 +132,8 @@ public class ClientesActivity extends AppCompatActivity {
         if(!clientePedido){
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.layout.menu, menu);
-        menu.getItem(0).setTitle("Pedidos");
-        menu.getItem(1).setTitle("Productos");
+        menu.getItem(0).setTitle(R.string.pedidos);
+        menu.getItem(1).setTitle(R.string.productos);
         return true;
         }
         return false;
@@ -157,6 +157,10 @@ public class ClientesActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_mis_rutas:
                 intent = new Intent(ClientesActivity.this, RutasActivity.class);
+                ClientesActivity.this.startActivity(intent);
+                return true;
+            case R.id.menu_configuracion:
+                intent = new Intent(ClientesActivity.this, ConfiguracionActivity.class);
                 ClientesActivity.this.startActivity(intent);
                 return true;
             default:

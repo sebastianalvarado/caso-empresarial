@@ -44,7 +44,7 @@ public class LoginActivity extends Activity {
 		Vendedor usuario = new Vendedor();
 		if(usuario.validarLogin(txt_login.getText().toString(), txt_contrasena.getText().toString()))
 		{
-			Toast.makeText(LoginActivity.this, "Usuario correcto", Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, R.string.usuario_correcto, Toast.LENGTH_SHORT).show();
 			OperacionesBaseDatos.login_vendedor = txt_login.getText().toString(); //se setea el usuario conectado
 			txt_login.setText("");
 			txt_contrasena.setText("");
@@ -53,7 +53,7 @@ public class LoginActivity extends Activity {
 		}
 		else
 		{
-			Toast.makeText(LoginActivity.this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+			Toast.makeText(LoginActivity.this, R.string.Usuario_contrasenia_incorrectos, Toast.LENGTH_SHORT).show();
 		}
     }
 

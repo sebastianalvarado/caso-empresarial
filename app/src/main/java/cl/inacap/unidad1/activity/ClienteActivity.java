@@ -93,7 +93,7 @@ public class ClienteActivity extends AppCompatActivity {
 
         if(accion.equals("editar")) {
             //le asigna nombre al boton de gestion
-            btn_gestionar_cliente.setText("EDITAR");
+            btn_gestionar_cliente.setText(R.string.editar);
             cliente = (Cliente) bundle.getSerializable("cliente");
             txv_idcliente.setText(String.valueOf(cliente.id_cliente));
             txt_nombre_cliente.setText(String.valueOf(cliente.nombre_cliente));
@@ -118,7 +118,7 @@ public class ClienteActivity extends AppCompatActivity {
             ll_idcliente.setVisibility(LinearLayout.GONE);
             btn_eliminar_cliente.setVisibility(View.GONE);
             btn_pedidos_cliente.setVisibility(View.GONE);
-            btn_gestionar_cliente.setText("Nuevo");
+            btn_gestionar_cliente.setText(R.string.nuevo);
 
             //se indica que hará el boton de gestión
             btn_gestionar_cliente.setOnClickListener(new View.OnClickListener(){
@@ -140,7 +140,7 @@ public class ClienteActivity extends AppCompatActivity {
 
         }
         else {
-            Toast.makeText(ClienteActivity.this,"OPCION ERRONEA CLIENTE", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ClienteActivity.this,R.string.opcion_erronea_cliente, Toast.LENGTH_SHORT).show();
             finish();
         }
     }

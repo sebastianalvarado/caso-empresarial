@@ -57,7 +57,7 @@
     <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Activo"
+        android:text="@string/activo"
         android:id="@+id/cb_estado_cliente"
         android:textSize="@dimen/textSizeForm"
         android:checked="true"
@@ -125,7 +125,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_pedidos_cliente"
-        android:text="Pedidos Cliente"
+        android:text="@string/pedidos_cliente"
         android:textSize="30dp"
         android:layout_below="@+id/tableRowCliente"
         android:background="@drawable/btn_azul"/>

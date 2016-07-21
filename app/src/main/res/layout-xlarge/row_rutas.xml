@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text=""
         android:id="@+id/txv_row_ruta"
         android:drawableLeft="@mipmap/ic_direccion" />
 </LinearLayout>

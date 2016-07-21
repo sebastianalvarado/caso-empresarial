@@ -97,7 +97,7 @@ public class MapaActivity extends Activity {
                 String location = txt_direccion_pedido.getText().toString();
 
                 if (location == null || location.equals("")) {
-                    Toast.makeText(getBaseContext(), "Lugar no ingresado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.lugar_no_ingresado, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

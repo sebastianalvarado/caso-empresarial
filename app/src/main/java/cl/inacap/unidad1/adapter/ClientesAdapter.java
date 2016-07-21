@@ -43,7 +43,7 @@ public class ClientesAdapter extends ArrayAdapter<Cliente> {
         TextView txv_row_id_cliente = (TextView) rowView.findViewById(R.id.txv_row_id_cliente);
         TextView txv_row_nombre_cliente = (TextView) rowView.findViewById(R.id.txv_row_nombre_cliente);
 
-        txv_row_id_cliente.setText("Cliente " + String.valueOf(lista.get(position).id_cliente));
+        txv_row_id_cliente.setText(R.string.cliente + " " + String.valueOf(lista.get(position).id_cliente));
         txv_row_nombre_cliente.setText(String.valueOf(lista.get(position).nombre_cliente));
 
         //si el cliente no esta disponible se cambia de color el fondo

@@ -2,6 +2,7 @@ package cl.inacap.unidad1.clases;
 
 
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 
 import org.json.JSONArray;
@@ -12,12 +13,15 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import cl.inacap.unidad1.activity.R;
+
 public class Producto implements Serializable {
 
     public int id_producto;
     public String nombre_producto;
-    public int precio_producto;
+    public Double precio_producto;
     public boolean estado_producto;
+    private Configuracion configuracion = new Configuracion().ObtenerConfiguracion();
 
     //nombre de las columnas de la tabla
     private String COL_ID_PRODUCTO = "id_producto";
@@ -32,8 +36,9 @@ public class Producto implements Serializable {
     public String toString()
     {
         return String.valueOf(this.id_producto) + " : " + this.nombre_producto
-                + " ($" + this.precio_producto+ " : "
-                + (this.estado_producto ? "disponible" : "no disponible" ) +")";
+                + " (" + this.configuracion.moneda_formato + " " + (this.precio_producto * (configuracion.moneda_personal ? configuracion.moneda_valor : 1))+ " : "
+                + (this.estado_producto ? obtenerRecursoString(R.string.disponible)
+                                        : obtenerRecursoString(R.string.no_disponible) ) +")";
     }
 
     //funcion para transformar un cursor a la clase tipo
@@ -42,7 +47,7 @@ public class Producto implements Serializable {
         Producto producto = new Producto();
         producto.id_producto = cursor.getInt(cursor.getColumnIndex(COL_ID_PRODUCTO));
         producto.nombre_producto = cursor.getString(cursor.getColumnIndex(COL_NOMBRE_PRODUCTO));
-        producto.precio_producto = cursor.getInt(cursor.getColumnIndex(COL_PRECIO_PRODUCTO));
+        producto.precio_producto = cursor.getDouble(cursor.getColumnIndex(COL_PRECIO_PRODUCTO));
         producto.estado_producto = (cursor.getInt(cursor.getColumnIndex(COL_ESTADO_PRODUCTO))) == 1 ? true : false;
 
         return producto;
@@ -135,15 +140,19 @@ public class Producto implements Serializable {
                 values.put(COL_ESTADO_PRODUCTO, this.estado_producto);
                 //se genera la query para actualizar el producto
                 OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_producto = " + this.id_producto, null);
-                return "Se elminó el producto con exito (lógico)";
+                return obtenerRecursoString(R.string.producto_elimina_exito);
 
             }
             else
-                return "El producto ya ha sido eliminado (lógico)";
+                return obtenerRecursoString(R.string.producto_elimina_error);
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error al intentar elminar el producto";
+            return obtenerRecursoString(R.string.producto_elimina_error_exp);
         }
     }
 
+    private String obtenerRecursoString(int recurso)
+    {
+        return OperacionesBaseDatos.mi_contexto.getResources().getString(recurso);
+    }
 }

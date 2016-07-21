@@ -25,12 +25,12 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:hint="DIRECCIÓN"/>
+            android:hint="@string/direccion"/>
     </LinearLayout>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buscar Dirección"
+        android:text="@string/buscar_direccion"
         android:id="@+id/btn_buscar_direccion"
         android:layout_below="@+id/linearLayout1"
         android:layout_alignParentLeft="true"
@@ -42,7 +42,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Asignar dirección a pedido"
+        android:text="@string/asignar_direccion_pedido"
         android:id="@+id/btn_asignar_direccion_pedido"
         android:layout_below="@+id/btn_buscar_direccion"
         android:layout_alignParentLeft="true"

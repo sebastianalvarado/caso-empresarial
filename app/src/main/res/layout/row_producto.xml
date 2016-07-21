@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:minWidth="@dimen/minWidthRow"
-                    android:text="Valor"/>
+                    android:text="@string/valor"/>
 
                 <TextView
                     android:layout_width="wrap_content"

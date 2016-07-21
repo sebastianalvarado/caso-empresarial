@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import cl.inacap.unidad1.activity.R;
 import cl.inacap.unidad1.clases.Cliente;
+import cl.inacap.unidad1.clases.Configuracion;
 import cl.inacap.unidad1.clases.Pedido;
 import cl.inacap.unidad1.clases.Producto;
 
@@ -25,6 +26,7 @@ public class PedidosAdapter extends ArrayAdapter<Pedido> {
 
     private final Context context;
     private final ArrayList<Pedido> lista;
+    private Configuracion configuracion = new Configuracion().ObtenerConfiguracion();
 
     public PedidosAdapter(Context context, ArrayList<Pedido> itemsArrayList) {
 
@@ -68,7 +70,7 @@ public class PedidosAdapter extends ArrayAdapter<Pedido> {
         producto.ObtenerProducto(lista.get(position).id_producto);
 
         txv_row_producto.setText(producto.toString());
-        txv_row_precio_pedido.setText(String.valueOf(lista.get(position).precio_pedido));
+        txv_row_precio_pedido.setText(configuracion.moneda_formato + " " +  String.valueOf(lista.get(position).precio_pedido * (configuracion.moneda_personal ? configuracion.moneda_valor : 1)));
         txv_row_catidad_producto.setText(String.valueOf(lista.get(position).cantidad_producto));
         txv_row_vendedor.setText(lista.get(position).vendedor);
         txv_row_direccion.setText(lista.get(position).direccion_pedido);

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import cl.inacap.unidad1.adapter.PedidosAdapter;
 import cl.inacap.unidad1.clases.Cliente;
+import cl.inacap.unidad1.clases.Configuracion;
 import cl.inacap.unidad1.clases.Pedido;
 import cl.inacap.unidad1.clases.Producto;
 
@@ -127,8 +128,8 @@ public class PedidosActivity extends AppCompatActivity {
         //cuando cambie la localidad se centra la camara
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.layout.menu, menu);
-        menu.getItem(0).setTitle("Clientes");
-        menu.getItem(1).setTitle("Productos");
+        menu.getItem(0).setTitle(R.string.clientes);
+        menu.getItem(1).setTitle(R.string.productos);
         return true;
     }
 
@@ -151,6 +152,10 @@ public class PedidosActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_mis_rutas:
                 intent = new Intent(PedidosActivity.this, RutasActivity.class);
+                PedidosActivity.this.startActivity(intent);
+                return true;
+            case R.id.menu_configuracion:
+                intent = new Intent(PedidosActivity.this, ConfiguracionActivity.class);
                 PedidosActivity.this.startActivity(intent);
                 return true;
             default:

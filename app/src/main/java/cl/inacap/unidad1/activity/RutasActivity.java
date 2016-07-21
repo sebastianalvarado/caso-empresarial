@@ -99,7 +99,7 @@ public class RutasActivity extends FragmentActivity implements LocationListener 
         //se comprueban los permisos del sistema para poder obtener la localidad actual del dispositivo
         if (ActivityCompat.checkSelfPermission(RutasActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(RutasActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(RutasActivity.this,"Sin permisos para localidad",Toast.LENGTH_LONG);
+            Toast.makeText(RutasActivity.this,R.string.sin_permisos_localidad,Toast.LENGTH_LONG);
         }
 
         //permite obtener la localidad actual del dispositivo
@@ -117,7 +117,7 @@ public class RutasActivity extends FragmentActivity implements LocationListener 
             }
             else
             {
-                Toast.makeText(getApplicationContext(),"Localidad no disponible",Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),R.string.localidad_no_disponible,Toast.LENGTH_SHORT);
             }
         }
 
@@ -128,7 +128,7 @@ public class RutasActivity extends FragmentActivity implements LocationListener 
                 //se validan nuevamente los permisos si el boton es pulsado
                 if (ActivityCompat.checkSelfPermission(RutasActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(RutasActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(RutasActivity.this,"Sin permisos para localidad",Toast.LENGTH_LONG);
+                    Toast.makeText(RutasActivity.this,R.string.sin_permisos_localidad,Toast.LENGTH_LONG);
                 }
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     //si no esta disponible genera una alerta permitiendo habilitar el servicio de localidad
@@ -146,9 +146,9 @@ public class RutasActivity extends FragmentActivity implements LocationListener 
                     };
                     //si presiona si, se accedera al menu de localidad, si preciosa no o se devuelve, no ocurre nada
                     AlertDialog.Builder builder = new AlertDialog.Builder(RutasActivity.this);
-                    builder.setMessage("Debe activar el GPS.\n¿Desea activarlo?");
-                    builder.setNegativeButton("No", null)
-                           .setPositiveButton("Si", dialogClickListener);
+                    builder.setMessage(R.string.debe_activar_gps + ".\n" + R.string.desea_activar);
+                    builder.setNegativeButton(R.string.no, null)
+                            .setPositiveButton(R.string.si, dialogClickListener);
                     builder.show();
                     return false;
                 }
@@ -189,7 +189,7 @@ public class RutasActivity extends FragmentActivity implements LocationListener 
                         //la localidad del dispositivo hasta la marca pulsada
                         if (ActivityCompat.checkSelfPermission(RutasActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                                 && ActivityCompat.checkSelfPermission(RutasActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(RutasActivity.this,"Sin permisos para localidad",Toast.LENGTH_LONG);
+                            Toast.makeText(RutasActivity.this,R.string.sin_permisos_localidad,Toast.LENGTH_LONG);
                             return true;
                         }
                         // obtiene la localidad actual del gps

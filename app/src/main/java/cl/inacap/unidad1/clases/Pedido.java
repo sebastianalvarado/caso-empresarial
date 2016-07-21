@@ -2,6 +2,7 @@ package cl.inacap.unidad1.clases;
 
 
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+import cl.inacap.unidad1.activity.R;
+
 public class Pedido implements Serializable {
 
     public int id_pedido;
@@ -24,7 +27,7 @@ public class Pedido implements Serializable {
     public String vendedor;
     public int cantidad_producto;
     public String fecha_pedido;
-    public int precio_pedido;
+    public Double precio_pedido;
     public boolean estado_pedido;
     public double longitud_pedido;
     public double latitud_pedido;
@@ -70,7 +73,8 @@ public class Pedido implements Serializable {
                 + "\nUnd: " + String.valueOf(this.cantidad_producto)
                 + "; V: " + String.valueOf(precio_pedido)
                 + "; Fecha: " + this.fecha_pedido
-                + "; (" + (this.estado_pedido ? "Entregado" : "No Entregado" ) + ")";
+                + "; (" + (this.estado_pedido ? obtenerRecursoString(R.string.entregado)
+                                            : obtenerRecursoString(R.string.no_entregado) ) + ")";
     }
 
     //funcion para transformar un cursor a la clase tipo
@@ -83,7 +87,7 @@ public class Pedido implements Serializable {
         pedido.vendedor = cursor.getString(cursor.getColumnIndex(this.COL_VENDEDOR));
         pedido.cantidad_producto = cursor.getInt(cursor.getColumnIndex(this.COL_CANTIDAD_PRODUCTO));
         pedido.fecha_pedido = cursor.getString(cursor.getColumnIndex(this.COL_FECHA_PEDIDO));
-        pedido.precio_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_PRECIO_PEDIDO));
+        pedido.precio_pedido = cursor.getDouble(cursor.getColumnIndex(this.COL_PRECIO_PEDIDO));
         //en la base de datos el estado es int, por lo tanto se transforma el valor de la clase (booleano) con su equivalente en int
         pedido.estado_pedido = cursor.getInt(cursor.getColumnIndex(this.COL_ESTADO_PEDIDO)) == 1 ? true : false;
 
@@ -227,14 +231,14 @@ public class Pedido implements Serializable {
             if (insert > 0){
                 //si la inserción ha sido con exito, se registra el id del pedido en la clase
                 this.id_pedido = Integer.parseInt("" + insert);
-                return "Pedido agregado con exito";
+                return obtenerRecursoString(R.string.pedido_agrega_exito);
             }
             else
-                return "Error al intentar agregar pedido";
+                return obtenerRecursoString(R.string.pedido_agrega_error);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error al intentar agregar un predido";
+            return obtenerRecursoString(R.string.pedido_agrega_error_exp);
         }
     }
 
@@ -257,12 +261,12 @@ public class Pedido implements Serializable {
 
             //se genera la consulta de update
             OperacionesBaseDatos.escribirInstancia().update(this.nombreTabla, values, "id_pedido = " + this.id_pedido, null);
-            return "Se modifico el pedido con exito";
+            return obtenerRecursoString(R.string.pedido_modifica_exito);
 
         } catch (Exception e) {
             Log.e("SegundaAplicacion",e.toString());
             e.printStackTrace();
-            return "Error al intentar recuperar el pedido";
+            return obtenerRecursoString(R.string.pedido_modifica_error_exp);
         }
 
     }
@@ -271,4 +275,9 @@ public class Pedido implements Serializable {
         return null;
     }
 
+
+    private String obtenerRecursoString(int recurso)
+    {
+        return OperacionesBaseDatos.mi_contexto.getResources().getString(recurso);
+    }
 }

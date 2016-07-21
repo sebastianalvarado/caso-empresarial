@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="ID"
+            android:text="@string/id"
             android:textIsSelectable="false"
             android:textSize="@dimen/textSizeForm"
             android:layout_weight="0.17" />
@@ -51,7 +51,7 @@
         android:inputType="date"
         android:ems="10"
         android:id="@+id/txt_fecha_pedido"
-        android:hint="Fecha"
+        android:hint="@string/fecha"
         android:textSize="@dimen/textSizeForm"
         android:layout_below="@+id/ll_idpedido"
         android:layout_alignParentLeft="true"
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:height="75dp"
-        android:text="Cliente"
+        android:text="@string/cliente"
         android:id="@+id/btn_cliente_pedido"
         android:layout_below="@+id/txt_fecha_pedido"
         android:background="@drawable/btn_verde_seleccion"
@@ -78,7 +78,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mapa"
+        android:text="@string/mapa"
         android:height="75dp"
         android:id="@+id/btn_mapa"
         android:layout_below="@+id/btn_cliente_pedido"
@@ -92,7 +92,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Producto"
+        android:text="@string/producto"
         android:height="75dp"
         android:id="@+id/btn_producto_pedido"
         android:background="@drawable/btn_verde_seleccion"
@@ -109,8 +109,7 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/txt_cantidad_pedido"
-        android:hint="Cantidad"
-        android:numeric="integer"
+        android:hint="@string/cantidad"
         android:textSize="@dimen/textSizeForm"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -125,7 +124,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$"
+            android:text="@string/moneda_pesos"
             android:textSize="@dimen/textSizeForm"/>
         <TextView
             android:layout_width="wrap_content"
@@ -138,7 +137,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Entregado"
+        android:text="@string/entregado"
         android:id="@+id/cb_estado_pedido"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -167,7 +166,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eliminar"
+        android:text="@string/eliminar"
         android:id="@+id/btn_eliminar_pedido"
         android:layout_below="@+id/btn_gestionar_pedido"
         android:layout_alignRight="@+id/btn_gestionar_pedido"

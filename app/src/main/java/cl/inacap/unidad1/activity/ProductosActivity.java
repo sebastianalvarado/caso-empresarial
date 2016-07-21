@@ -90,8 +90,8 @@ public class ProductosActivity extends AppCompatActivity {
         if(!productoPedido) {
             MenuInflater menuInflater = getMenuInflater();
             menuInflater.inflate(R.layout.menu, menu);
-            menu.getItem(0).setTitle("Clientes");
-            menu.getItem(1).setTitle("Pedidos");
+            menu.getItem(0).setTitle(R.string.clientes);
+            menu.getItem(1).setTitle(R.string.pedidos);
             return true;
         }
         else return false;
@@ -116,6 +116,10 @@ public class ProductosActivity extends AppCompatActivity {
 
             case R.id.menu_mis_rutas:
                 intent = new Intent(ProductosActivity.this, RutasActivity.class);
+                ProductosActivity.this.startActivity(intent);
+                return true;
+            case R.id.menu_configuracion:
+                intent = new Intent(ProductosActivity.this, ConfiguracionActivity.class);
                 ProductosActivity.this.startActivity(intent);
                 return true;
             default:

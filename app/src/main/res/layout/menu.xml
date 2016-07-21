@@ -11,4 +11,7 @@
     <item android:id="@+id/menu_mis_rutas"
         android:title="@string/mis_rutas" />
 
+    <item android:id="@+id/menu_configuracion"
+        android:title="@string/configuracion"/>
+
 </menu >

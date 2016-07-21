@@ -37,7 +37,7 @@
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="BIENVENIDO"
+                android:text="@string/bienvenido"
                 android:textSize="@dimen/textSizeForm"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:gravity="center" />
@@ -49,8 +49,8 @@
                 android:layout_below="@+id/textView1"
                 android:layout_marginTop="5dp"
                 android:textSize="@dimen/textSizeForm"
-                android:hint="Usuario"
-                android:text="user1">
+                android:hint="@string/usuario"
+                android:text="">
                 <requestFocus />
             </EditText>
 
@@ -62,14 +62,14 @@
                 android:inputType="textPassword"
                 android:layout_below="@+id/txt_login"
                 android:textSize="@dimen/textSizeForm"
-                android:hint="Contraseña"
-                android:text="user1" />
+                android:hint="@string/contrasenia"
+                android:text="" />
 
             <Button
                 android:id="@+id/btn_ingresar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ingresar"
+                android:text="@string/ingresar"
                 android:layout_below="@+id/txt_contrasena"
                 android:textSize="@dimen/textSizeForm"/>
 

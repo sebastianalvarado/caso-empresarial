@@ -1,17 +1,22 @@
 package cl.inacap.unidad1.activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.app.VoiceInteractor;
 import android.content.Intent;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,26 +26,30 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.nio.BufferUnderflowException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import cl.inacap.unidad1.clases.Cliente;
+import cl.inacap.unidad1.clases.Configuracion;
 import cl.inacap.unidad1.clases.Pedido;
 import cl.inacap.unidad1.clases.Producto;
 
 public class PedidoActivity extends AppCompatActivity {
     ArrayAdapter<Producto> adapter;
+    Configuracion configuracion = null;
     //se generan las clases globales para tener mejor acceso a los compronentes del pedido
     Pedido pedido = new Pedido();
     Cliente cliente = new Cliente();
     Producto producto = new Producto();
+    Calendar calendar = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedido);
-
+        configuracion = new Configuracion().ObtenerConfiguracion();
         //se obtienen los componenetes
         TextView txv_idpedido = (TextView)findViewById(R.id.txv_idpedido);
         final TextView txt_precio_pedido = (TextView)findViewById(R.id.txv_precio_pedido);
@@ -56,11 +65,9 @@ public class PedidoActivity extends AppCompatActivity {
 
         //se setea un boton volver
         btn_volver.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
                 finish();
-
             }
         });
 
@@ -75,7 +82,7 @@ public class PedidoActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String _cantidad = s.toString();
                 int cantidad = Integer.parseInt(_cantidad.length() == 0 ? "0" : _cantidad);
-                int valor = cantidad * producto.precio_producto;
+                double valor = cantidad * producto.precio_producto * (configuracion.moneda_personal ? configuracion.moneda_valor : 1);
                 txt_precio_pedido.setText(String.valueOf(valor));
             }
 
@@ -148,6 +155,30 @@ public class PedidoActivity extends AppCompatActivity {
         });
 
 
+        //se setea la funcion de calendario en el textpo de la fecha
+        txt_fecha_pedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePicker = new DatePickerDialog(PedidoActivity.this,new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        //Calendar nuevaFecha = Calendar.getInstance();
+                        //se cambia a la fecha seleccionada
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        String fecha = "";
+                        //si en la configuracion se tiene formato especificado
+
+                        fecha = DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime());
+
+                        pedido.fecha_pedido = dayOfMonth + "/" + (monthOfYear +1)  + "/" + year;
+                        EditText txt_fecha_pedido_2 = (EditText)findViewById(R.id.txt_fecha_pedido);
+                        txt_fecha_pedido_2.setText(fecha);
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+                datePicker.show();
+            }
+        });
+
+
         //se busca que accion se hara
         Bundle bundle = null;
         String accion = "";
@@ -157,15 +188,34 @@ public class PedidoActivity extends AppCompatActivity {
         }
         if(accion.equals("editar"))
         {
-            btn_gestionar_pedido.setText("Editar");
+            btn_gestionar_pedido.setText(R.string.editar);
             pedido = (Pedido)bundle.getSerializable("pedido");
             cliente.ObtenerCliente(pedido.id_cliente);
             producto.ObtenerProducto(pedido.id_producto);
             //se llenan los componentes
             txv_idpedido.setText(String.valueOf(pedido.id_pedido));
             txt_cantidad_pedido.setText(String.valueOf(pedido.cantidad_producto));
-            txt_fecha_pedido.setText(pedido.fecha_pedido);
-            txt_precio_pedido.setText(String.valueOf(pedido.precio_pedido));
+            //se configura el formato de la fecha seleccionado
+            String fecha = "";
+            Date date = new Date();
+            //la fecha es guardada en este formato basico
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+            try {
+                date = formato.parse(pedido.fecha_pedido);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.setTime(date);
+            //aqui se formatea la fecha segun la configuracion
+            if(configuracion.fecha_personal)
+                fecha = DateFormat.format(configuracion.FormatoFecha(),calendar).toString();
+            else
+                fecha = DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime());
+
+
+            txt_fecha_pedido.setText(fecha);
+            txt_precio_pedido.setText(String.valueOf(pedido.precio_pedido * (configuracion.moneda_personal ? configuracion.moneda_valor : 1)));
             cb_estado_pedido.setChecked(pedido.estado_pedido);
             btn_cliente_pedido.setText(cliente.toString());
             btn_producto_pedido.setText(producto.toString());
@@ -199,7 +249,7 @@ public class PedidoActivity extends AppCompatActivity {
         {
             pedido = new Pedido();
             btn_eliminar_pedido.setVisibility(View.GONE);
-            btn_gestionar_pedido.setText("Nuevo");
+            btn_gestionar_pedido.setText(R.string.nuevo);
             //se indica que hará el boton de gestión
             btn_gestionar_pedido.setOnClickListener(new View.OnClickListener(){
 
@@ -251,7 +301,7 @@ public class PedidoActivity extends AppCompatActivity {
                 String _cantidad = txt_cantidad_pedido.getText().toString();
                 if(_cantidad.length() > 0) {
                     int cantidad = Integer.parseInt(_cantidad.length() == 0 ? "0" : _cantidad);
-                    int valor = cantidad * producto.precio_producto;
+                    Double valor = cantidad * producto.precio_producto;
                     txv_precio_pedido.setText(String.valueOf(valor));
                 }
 
@@ -303,14 +353,14 @@ public class PedidoActivity extends AppCompatActivity {
         EditText txv_cantidad_pedido = (EditText)findViewById(R.id.txt_cantidad_pedido);
         TextView txv_precio_pedido = (TextView)findViewById(R.id.txv_precio_pedido);
 
-        pedido.fecha_pedido = txt_fecha_pedido.getText().toString();
+        //pedido.fecha_pedido = txt_fecha_pedido.getText().toString();
         pedido.estado_pedido = cb_estado_pedido.isChecked();
         String cantidad = txv_cantidad_pedido.getText().toString();
         pedido.cantidad_producto = Integer.parseInt(cantidad);
-        String precio = txv_precio_pedido.getText().toString();
-        pedido.precio_pedido = Integer.parseInt(precio);
+        pedido.precio_pedido = pedido.cantidad_producto * producto.precio_producto;
         pedido.id_cliente = cliente.id_cliente;
         pedido.id_producto = producto.id_producto;
     }
+
 
 }

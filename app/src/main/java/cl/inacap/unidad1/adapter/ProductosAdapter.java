@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cl.inacap.unidad1.activity.R;
+import cl.inacap.unidad1.clases.Configuracion;
 import cl.inacap.unidad1.clases.Producto;
 
 //clase para realizar item de arraylist Productos personalizado
@@ -18,6 +19,7 @@ public class ProductosAdapter extends ArrayAdapter<Producto> {
 
     private final Context context;
     private final ArrayList<Producto> lista;
+    private Configuracion configuracion = new Configuracion().ObtenerConfiguracion();
 
     public ProductosAdapter(Context context, ArrayList<Producto> itemsArrayList) {
 
@@ -48,9 +50,10 @@ public class ProductosAdapter extends ArrayAdapter<Producto> {
 
         txv_row_id_producto.setText("N: " + String.valueOf(lista.get(position).id_producto));
         txv_row_nombre_producto.setText(String.valueOf(lista.get(position).nombre_producto));
-        txv_row_valor_producto.setText("$" + String.valueOf(lista.get(position).precio_producto));
+        txv_row_valor_producto.setText(configuracion.moneda_formato + " " +
+                " " + String.valueOf(lista.get(position).precio_producto * (configuracion.moneda_personal ? configuracion.moneda_valor : 1)));
         boolean estado = lista.get(position).estado_producto;
-        txv_row_estado_producto.setText(estado ? "(Disponible)" : "(No Disponible)" );
+        txv_row_estado_producto.setText(estado ? "("+R.string.disponible+")" : "("+R.string.no_disponible+")" );
 
         //si no esta disponible, se cambia el color de fondo
         if(!estado)
